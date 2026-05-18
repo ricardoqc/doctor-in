@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+
+  --color-primary: #f42434;
+  --color-secondary: #071f5d;
+  --color-accent: #2ED4C0;
+  --color-dark-alt: #001137;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f0f4f8;
+
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --shadow-premium: 0 10px 30px -5px rgba(0, 17, 55, 0.1), 0 4px 6px -2px rgba(0, 17, 55, 0.05);
+  --shadow-urgent: 0 10px 20px -5px rgba(244, 36, 52, 0.3);
+}
+
+@layer base {
+  body {
+    @apply m-0 font-body bg-surface text-dark-alt antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading mt-0;
+  }
+}
