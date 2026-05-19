@@ -40,14 +40,14 @@ const Home: React.FC = () => {
       <section className="relative w-full lg:h-screen min-h-[600px] bg-white overflow-hidden pt-20 lg:pt-0">
         <div className="relative max-w-[1440px] mx-auto h-full flex flex-col lg:block">
 
-          {/* Background Decorative Elements (Blurry Blobs) */}
-          <div className="absolute top-[-120px] lg:left-[900px] left-[50%] -translate-x-1/2 lg:translate-x-0 w-[700px] h-[700px] bg-[#2ED4C015] rounded-full blur-[100px] pointer-events-none" />
+          {/* Decorative glow elements */}
+          <div className="absolute top-[-120px] lg:left-[900px] left-[50%] -translate-x-1/2 lg:translate-x-0 w-[700px] h-[700px] bg-[#071f5d08] rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute top-[300px] left-[-80px] w-[320px] h-[320px] bg-[#F4243408] rounded-full blur-[60px] pointer-events-none" />
 
           {/* Hero Content */}
           <div className="relative lg:absolute top-0 left-0 lg:left-[80px] w-full lg:w-[580px] h-full flex flex-col justify-center items-center lg:items-start gap-8 py-10 lg:py-[100px] z-20 px-6 lg:px-0 text-center lg:text-left">
             {/* Hero Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#2ED4C015] border border-[#2ED4C050] rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
               <ShieldCheck size={15} className="text-accent" />
               <span className="text-accent font-bold text-[11px] lg:text-[13px]">Medical Care for International Travelers</span>
             </div>
@@ -91,7 +91,7 @@ const Home: React.FC = () => {
           {/* Hero Image - Balanced size and positioning */}
           <div className="relative lg:absolute top-0 lg:top-0 right-0 w-full lg:w-[800px] h-[400px] lg:h-full z-10 flex justify-center items-center lg:items-end mt-10 lg:mt-0">
             {/* Illustration Blob Bg */}
-            <div className="absolute w-[300px] h-[300px] lg:w-[800px] lg:h-[800px] bg-gradient-to-br from-[#EAF9F7] to-[#D0F4F0] rounded-full blur-[40px] opacity-60" />
+            <div className="absolute w-[300px] h-[300px] lg:w-[800px] lg:h-[800px] bg-gradient-to-br from-[#f0f4f8] to-[#e2ebf4] rounded-full blur-[40px] opacity-60" />
 
             <img
               src="/images/generated-1778253582567.png"
@@ -103,18 +103,18 @@ const Home: React.FC = () => {
       </section>
 
       {/* Trust Bar - Responsive */}
-      <div className="w-full bg-accent lg:h-20 py-8 lg:py-0 flex items-center px-6 lg:px-20">
+      <div className="w-full bg-secondary lg:h-20 py-8 lg:py-0 flex items-center px-6 lg:px-20">
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:flex lg:justify-between items-center w-full gap-8 lg:gap-x-16">
           {TRUST_BAR_ITEMS.map((item, i) => (
             <React.Fragment key={i}>
               <div className="flex items-center gap-3 shrink-0">
-                <item.icon size={22} className="text-dark-alt" />
+                <item.icon size={22} className="text-surface" />
                 <div className="flex flex-col">
-                  <span className="text-dark-alt font-heading font-bold text-[15px] leading-tight whitespace-nowrap">{item.title}</span>
-                  <span className="text-dark-alt/60 font-body text-[12px] leading-tight whitespace-nowrap">{item.sub}</span>
+                  <span className="text-surface font-heading font-bold text-[15px] leading-tight whitespace-nowrap">{item.title}</span>
+                  <span className="text-surface/60 font-body text-[12px] leading-tight whitespace-nowrap">{item.sub}</span>
                 </div>
               </div>
-              {i < 3 && <div className="hidden lg:block w-px h-8 bg-[#00113730]"></div>}
+              {i < 3 && <div className="hidden lg:block w-px h-8 bg-surface/20"></div>}
             </React.Fragment>
           ))}
         </div>

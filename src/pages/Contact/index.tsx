@@ -67,7 +67,7 @@ export const ContactPage: React.FC = () => {
                <div className="absolute top-0 right-0 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />
                <h4 className="text-xl font-heading font-bold mb-3 relative z-10">WhatsApp Help</h4>
                <p className="text-white/60 font-body text-sm mb-6 relative z-10">Quickest response for non-emergencies.</p>
-               <Button variant="accent" className="w-full flex gap-2 items-center justify-center !text-secondary font-bold relative z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent">
+               <Button variant="accent" className="w-full flex gap-2 items-center justify-center text-surface font-bold relative z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent">
                  <MessageCircle size={20} />
                  Chat on WhatsApp
                </Button>

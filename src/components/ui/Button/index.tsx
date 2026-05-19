@@ -21,7 +21,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantClasses = {
       primary: "bg-primary text-surface shadow-[0_4px_14px_rgba(244,36,52,0.4)] hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(244,36,52,0.6)] focus:ring-primary",
       secondary: "bg-secondary text-surface shadow-[0_4px_14px_rgba(7,31,93,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(7,31,93,0.5)] focus:ring-secondary",
-      accent: "bg-accent text-dark-alt shadow-[0_4px_14px_rgba(46,212,192,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(46,212,192,0.5)] focus:ring-accent",
+      accent: "bg-primary text-surface shadow-[0_4px_14px_rgba(244,36,52,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_20px_rgba(244,36,52,0.5)] focus:ring-primary",
       outline: "bg-transparent text-secondary border-2 border-secondary hover:bg-secondary hover:text-surface focus:ring-secondary",
       light: "bg-surface text-primary shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(0,0,0,0.2)] focus:ring-surface"
     };

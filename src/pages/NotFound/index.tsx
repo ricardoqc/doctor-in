@@ -13,7 +13,7 @@ export const NotFoundPage: React.FC = () => {
       />
 
       {/* Premium Decorative Blobs */}
-      <div className="absolute top-[10%] left-[10%] w-[350px] h-[350px] bg-[#2ED4C020] rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute top-[10%] left-[10%] w-[350px] h-[350px] bg-[#f4243410] rounded-full blur-[80px] pointer-events-none" />
       <div className="absolute bottom-[10%] right-[10%] w-[450px] h-[450px] bg-[#F4243415] rounded-full blur-[100px] pointer-events-none" />
 
       {/* Core card layout */}

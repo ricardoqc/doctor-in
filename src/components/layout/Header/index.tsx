@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center group" aria-label="Go to homepage">
           <img 
-            src={isScrolled || isDarkHeroPage ? "/images/brands/doctor-in-logo-2.png" : "/images/brands/doctor-in-logo-1.png"} 
+            src={isScrolled || isDarkHeroPage ? "/images/brands/doctor-in-logo-1.png" : "/images/brands/doctor-in-logo-2.png"} 
             alt="Doctor In Logo" 
             className="h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
           />
