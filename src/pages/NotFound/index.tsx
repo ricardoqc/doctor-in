@@ -1,10 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { GeoHead } from '@/seo/GeoHead';
 import { Button } from '@/components/ui/Button';
 import { Home, ArrowRight, ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const NotFoundPage: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div className="w-full min-h-screen bg-secondary text-surface flex flex-col justify-center items-center px-6 relative overflow-hidden">
       <GeoHead
@@ -25,9 +27,9 @@ export const NotFoundPage: React.FC = () => {
 
         <div className="space-y-3">
           <h1 className="text-8xl font-heading font-black text-accent tracking-widest leading-none">404</h1>
-          <h2 className="text-2xl font-heading font-bold text-surface">Page Not Found</h2>
+          <h2 className="text-2xl font-heading font-bold text-surface">{t('notFound.title')}</h2>
           <p className="text-white/60 font-body text-sm max-w-[320px] mx-auto leading-relaxed">
-            The link might be broken, or the page has been moved. Don't worry, our medical team is still here for you!
+            {t('notFound.desc')}
           </p>
         </div>
 
@@ -35,12 +37,12 @@ export const NotFoundPage: React.FC = () => {
           <Link to="/" className="w-full sm:w-auto">
             <Button variant="accent" className="w-full !rounded-full !px-8 flex items-center justify-center gap-2 font-bold shadow-lg shadow-accent/20">
               <Home size={16} />
-              Back Home
+              {t('notFound.backHome')}
             </Button>
           </Link>
           <Link to="/contact" className="w-full sm:w-auto">
             <Button variant="light" className="w-full !rounded-full !px-8 flex items-center justify-center gap-2 font-bold text-secondary">
-              Contact Support
+              {t('notFound.contactSupport')}
               <ArrowRight size={16} />
             </Button>
           </Link>

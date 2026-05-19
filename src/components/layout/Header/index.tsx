@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/Button';
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { Menu, X } from 'lucide-react';
 
-const navLinks = [
-  { label: 'About Us', href: '/about' },
-  { label: 'Services', href: '/#services' },
-  { label: 'Specialists', href: '/#specialists' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/contact' },
-];
-
 export const Header: React.FC = () => {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { pathname } = useLocation();
@@ -53,36 +48,50 @@ export const Header: React.FC = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-10">
-          {navLinks.map((link) => (
+          {[
+            { key: 'about', href: '/about' },
+            { key: 'services', href: '/#services' },
+            { key: 'specialists', href: '/#specialists' },
+            { key: 'blog', href: '/blog' },
+            { key: 'contact', href: '/contact' },
+          ].map((link) => (
             <Link 
-              key={link.label} 
+              key={link.key} 
               to={link.href}
               className={`font-body text-[15px] font-semibold transition-all hover:text-accent ${
                 isScrolled || isDarkHeroPage ? 'text-white/70' : 'text-secondary/70'
               }`}
             >
-              {link.label}
+              {t(`nav.${link.key}`)}
             </Link>
           ))}
         </nav>
 
 
-        {/* CTA */}
-        <div className="hidden lg:block">
+        {/* CTA & Language */}
+        <div className="hidden lg:flex items-center gap-4">
+          <div className={isScrolled || isDarkHeroPage ? 'text-surface' : 'text-secondary'}>
+            <LanguageSwitcher />
+          </div>
           <Button variant="primary" className="!px-7 !py-3 !text-sm flex gap-2 items-center shadow-lg">
-            Book Now
+            {t('common.bookNow')}
           </Button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button 
-          className={`lg:hidden p-2 transition-colors ${isScrolled || isDarkHeroPage ? 'text-surface' : 'text-secondary'}`}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle mobile menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
-        </button>
+        {/* Mobile controls (visible directly on mobile) */}
+        <div className="flex lg:hidden items-center gap-3">
+          <div className={isScrolled || isDarkHeroPage ? 'text-surface' : 'text-secondary'}>
+            <LanguageSwitcher />
+          </div>
+          <button 
+            className={`p-2 transition-colors ${isScrolled || isDarkHeroPage ? 'text-surface' : 'text-secondary'}`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -93,18 +102,25 @@ export const Header: React.FC = () => {
         aria-hidden={!isMobileMenuOpen}
       >
         <div className="flex flex-col gap-8 p-10 items-center">
-          {navLinks.map((link) => (
+          {[
+            { key: 'about', href: '/about' },
+            { key: 'services', href: '/#services' },
+            { key: 'specialists', href: '/#specialists' },
+            { key: 'blog', href: '/blog' },
+            { key: 'contact', href: '/contact' },
+          ].map((link) => (
             <Link 
-              key={link.label} 
+              key={link.key} 
               to={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-surface text-3xl font-heading font-bold hover:text-accent transition-colors"
             >
-              {link.label}
+              {t(`nav.${link.key}`)}
             </Link>
           ))}
+
           <Button variant="primary" size="lg" className="w-full flex gap-3 items-center mt-4">
-            Book Now
+            {t('common.bookNow')}
           </Button>
         </div>
       </div>

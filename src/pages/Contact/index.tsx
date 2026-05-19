@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Phone, Mail, MessageCircle, Send, Clock, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { GeoHead } from '@/seo/GeoHead';
 
 export const ContactPage: React.FC = () => {
+  const { t } = useTranslation();
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,9 +27,9 @@ export const ContactPage: React.FC = () => {
         <div className="absolute bottom-[-50px] right-[-50px] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px]" />
 
         <div className="max-w-[1440px] mx-auto relative z-10">
-          <h1 className="text-surface text-[42px] lg:text-[56px] font-heading font-bold mb-6">Contact Us</h1>
+          <h1 className="text-surface text-[42px] lg:text-[56px] font-heading font-bold mb-6">{t('contact.heroTitle')}</h1>
           <p className="text-white/70 text-base lg:text-[18px] font-body leading-[1.6] max-w-[700px] mx-auto">
-            We are available 24/7 for medical emergencies and standard consultations across major cities in Latin America.
+            {t('contact.heroDesc')}
           </p>
         </div>
       </section>
@@ -39,17 +41,17 @@ export const ContactPage: React.FC = () => {
           {/* Left: Info */}
           <div className="flex-1 lg:max-w-[450px] space-y-12">
             <div className="space-y-6">
-              <h2 className="text-secondary text-[32px] lg:text-[40px] font-heading font-bold leading-tight">Direct Contact</h2>
+              <h2 className="text-secondary text-[32px] lg:text-[40px] font-heading font-bold leading-tight">{t('contact.directTitle')}</h2>
               <p className="text-dark-alt/60 font-body text-lg">
-                Our support team speaks English, French, and Spanish. Call us anytime.
+                {t('contact.directDesc')}
               </p>
             </div>
 
             <div className="space-y-6">
               {[
-                { icon: Phone, title: 'Call 24/7', detail: '+51 987 654 321', color: 'text-primary', bgColor: 'bg-primary/10' },
-                { icon: Mail, title: 'Email Support', detail: 'care@doctorin.pe', color: 'text-accent', bgColor: 'bg-accent/10' },
-                { icon: Clock, title: 'Availability', detail: '365 Days / 24 Hours', color: 'text-secondary', bgColor: 'bg-secondary/10' }
+                { icon: Phone, title: t('contact.callTitle'), detail: '+51 987 654 321', color: 'text-primary', bgColor: 'bg-primary/10' },
+                { icon: Mail, title: t('contact.emailTitle'), detail: 'care@doctorin.pe', color: 'text-accent', bgColor: 'bg-accent/10' },
+                { icon: Clock, title: t('contact.availTitle'), detail: t('contact.availDesc'), color: 'text-secondary', bgColor: 'bg-secondary/10' }
               ].map((info, idx) => (
                 <div key={idx} className="flex items-center gap-6 p-6 bg-white rounded-[24px] shadow-premium border border-white hover:border-accent/30 transition-all duration-300 group">
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${info.bgColor} ${info.color} group-hover:scale-110 transition-transform`}>
@@ -65,11 +67,11 @@ export const ContactPage: React.FC = () => {
 
             <div className="p-8 bg-secondary rounded-[32px] text-surface shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />
-               <h4 className="text-xl font-heading font-bold mb-3 relative z-10">WhatsApp Help</h4>
-               <p className="text-white/60 font-body text-sm mb-6 relative z-10">Quickest response for non-emergencies.</p>
+               <h4 className="text-xl font-heading font-bold mb-3 relative z-10">{t('contact.waTitle')}</h4>
+               <p className="text-white/60 font-body text-sm mb-6 relative z-10">{t('contact.waDesc')}</p>
                <Button variant="accent" className="w-full flex gap-2 items-center justify-center text-surface font-bold relative z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent">
                  <MessageCircle size={20} />
-                 Chat on WhatsApp
+                 {t('contact.waBtn')}
                </Button>
             </div>
           </div>
@@ -82,9 +84,9 @@ export const ContactPage: React.FC = () => {
                   <CheckCircle size={44} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-heading font-bold text-secondary">Message Sent!</h3>
+                  <h3 className="text-2xl font-heading font-bold text-secondary">{t('contact.successTitle')}</h3>
                   <p className="text-sm font-body text-[#4A5568] leading-relaxed max-w-[340px] mx-auto">
-                    Thank you for reaching out to Doctor In. Our support team has received your message and will get back to you via email within <strong className="text-primary">1 to 2 hours</strong>.
+                    {t('contact.successDesc')} <strong className="text-primary">{t('contact.successTime')}</strong>.
                   </p>
                 </div>
                 <Button 
@@ -92,58 +94,58 @@ export const ContactPage: React.FC = () => {
                   variant="outline" 
                   className="!rounded-full px-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                 >
-                  Send another message
+                  {t('contact.successBtn')}
                 </Button>
               </div>
             ) : (
               <>
-                <h3 className="text-secondary text-[28px] font-heading font-bold mb-8">Send us a message</h3>
+                <h3 className="text-secondary text-[28px] font-heading font-bold mb-8">{t('contact.formTitle')}</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label htmlFor="contact-name" className="text-secondary text-sm font-bold font-heading ml-1 block">Full Name</label>
+                      <label htmlFor="contact-name" className="text-secondary text-sm font-bold font-heading ml-1 block">{t('contact.nameLabel')}</label>
                       <input 
                         required
                         id="contact-name"
                         type="text" 
-                        placeholder="John Doe" 
+                        placeholder={t('contact.namePlaceholder')}
                         className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="contact-email" className="text-secondary text-sm font-bold font-heading ml-1 block">Email Address</label>
+                      <label htmlFor="contact-email" className="text-secondary text-sm font-bold font-heading ml-1 block">{t('contact.emailLabel')}</label>
                       <input 
                         required
                         id="contact-email"
                         type="email" 
-                        placeholder="john@example.com" 
+                        placeholder={t('contact.emailPlaceholder')}
                         className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="contact-subject" className="text-secondary text-sm font-bold font-heading ml-1 block">Subject</label>
+                    <label htmlFor="contact-subject" className="text-secondary text-sm font-bold font-heading ml-1 block">{t('contact.subjectLabel')}</label>
                     <input 
                       required
                       id="contact-subject"
                       type="text" 
-                      placeholder="Medical Consultation, Inquiry, etc." 
+                      placeholder={t('contact.subjectPlaceholder')}
                       className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="contact-message" className="text-secondary text-sm font-bold font-heading ml-1 block">Your Message</label>
+                    <label htmlFor="contact-message" className="text-secondary text-sm font-bold font-heading ml-1 block">{t('contact.messageLabel')}</label>
                     <textarea 
                       required
                       id="contact-message"
                       rows={5}
-                      placeholder="How can we help you?" 
+                      placeholder={t('contact.messagePlaceholder')}
                       className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary resize-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                     />
                   </div>
                   <Button type="submit" variant="primary" size="lg" className="w-full flex gap-3 items-center justify-center font-bold shadow-urgent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent">
                     <Send size={20} />
-                    Send Message
+                    {t('contact.submitBtn')}
                   </Button>
                 </form>
               </>
@@ -165,7 +167,7 @@ export const ContactPage: React.FC = () => {
             <div className="w-6 h-6 bg-primary rounded-full" />
           </div>
           <span className="bg-secondary text-surface px-6 py-2 rounded-full font-heading font-bold text-sm shadow-2xl">
-            Latam Operations Center
+            {t('contact.mapMarker')}
           </span>
         </div>
       </section>

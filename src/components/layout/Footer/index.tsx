@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Phone, Mail, MapPin, MessageCircle, Camera, Share2, Send } from 'lucide-react';
 
 
 export const Footer: React.FC = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -24,7 +26,7 @@ export const Footer: React.FC = () => {
               />
             </Link>
             <p className="text-surface/60 font-body leading-relaxed max-w-[280px]">
-              Providing premium medical assistance for travelers and tourists across Latin America. 24/7 care wherever you are.
+              {t('footer.description')}
             </p>
             <div className="flex gap-4">
               {[MessageCircle, Camera, Share2].map((Icon, i) => (
@@ -42,31 +44,31 @@ export const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="space-y-8 lg:pl-10">
-            <h4 className="text-lg font-heading font-bold text-accent">Quick Links</h4>
+            <h4 className="text-lg font-heading font-bold text-accent">{t('footer.quickLinks')}</h4>
             <ul className="space-y-4">
               <li>
                 <Link to="/about" className="text-surface/60 hover:text-surface transition-colors font-body">
-                  About Us
+                  {t('nav.about')}
                 </Link>
               </li>
               <li>
                 <Link to="/#services" className="text-surface/60 hover:text-surface transition-colors font-body">
-                  Services
+                  {t('nav.services')}
                 </Link>
               </li>
               <li>
                 <Link to="/#specialists" className="text-surface/60 hover:text-surface transition-colors font-body">
-                  Our Specialists
+                  {t('nav.ourSpecialists')}
                 </Link>
               </li>
               <li>
                 <Link to="/blog" className="text-surface/60 hover:text-surface transition-colors font-body">
-                  Health Blog
+                  {t('nav.healthBlog')}
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="text-surface/60 hover:text-surface transition-colors font-body">
-                  Contact
+                  {t('nav.contact')}
                 </Link>
               </li>
             </ul>
@@ -74,27 +76,27 @@ export const Footer: React.FC = () => {
 
           {/* Contact Details */}
           <div className="space-y-8 lg:pl-10">
-            <h4 className="text-lg font-heading font-bold text-accent">Contact Care</h4>
+            <h4 className="text-lg font-heading font-bold text-accent">{t('footer.contactCare')}</h4>
             <ul className="space-y-5">
               <li className="flex gap-4 items-start">
                 <div className="mt-1 text-accent"><Phone size={18} /></div>
                 <div className="font-body">
-                  <p className="text-surface/40 text-xs font-bold uppercase tracking-widest mb-1">Phone 24/7</p>
+                  <p className="text-surface/40 text-xs font-bold uppercase tracking-widest mb-1">{t('footer.phone247')}</p>
                   <p className="text-surface font-semibold hover:text-accent transition-colors">+51 987 654 321</p>
                 </div>
               </li>
               <li className="flex gap-4 items-start">
                 <div className="mt-1 text-accent"><Mail size={18} /></div>
                 <div className="font-body">
-                  <p className="text-surface/40 text-xs font-bold uppercase tracking-widest mb-1">Email Support</p>
+                  <p className="text-surface/40 text-xs font-bold uppercase tracking-widest mb-1">{t('footer.emailSupport')}</p>
                   <p className="text-surface font-semibold hover:text-accent transition-colors">care@doctorin.pe</p>
                 </div>
               </li>
               <li className="flex gap-4 items-start">
                 <div className="mt-1 text-accent"><MapPin size={18} /></div>
                 <div className="font-body">
-                  <p className="text-surface/40 text-xs font-bold uppercase tracking-widest mb-1">Headquarters</p>
-                  <p className="text-surface font-semibold">Latam Regional Operations</p>
+                  <p className="text-surface/40 text-xs font-bold uppercase tracking-widest mb-1">{t('footer.headquarters')}</p>
+                  <p className="text-surface font-semibold">{t('footer.latamOps')}</p>
                 </div>
               </li>
             </ul>
@@ -102,16 +104,16 @@ export const Footer: React.FC = () => {
 
           {/* Newsletter */}
           <div className="space-y-8">
-            <h4 className="text-lg font-heading font-bold text-accent">Stay Healthy</h4>
+            <h4 className="text-lg font-heading font-bold text-accent">{t('footer.stayHealthy')}</h4>
             <p className="text-surface/60 font-body text-sm leading-relaxed">
-              Get health tips for travelers directly in your inbox.
+              {t('footer.newsletterDesc')}
             </p>
             <div className="flex bg-surface/5 border border-surface/10 rounded-2xl p-1 focus-within:border-accent/30 transition-colors">
               <label htmlFor="footer-newsletter-email" className="sr-only">Email Address</label>
               <input 
                 id="footer-newsletter-email"
                 type="email" 
-                placeholder="Your email..." 
+                placeholder={t('footer.emailPlaceholder')}
                 className="bg-transparent border-none focus:outline-none px-4 py-2 w-full text-sm font-body focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 text-surface"
               />
               <button aria-label="Subscribe to newsletter" className="bg-accent hover:bg-accent/80 text-surface p-2.5 rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
@@ -125,11 +127,11 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-10 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-surface/40 text-sm font-body">
-            © {currentYear} Doctor IN. All rights reserved. Built for travelers across Latin America.
+            {t('footer.copyright', { year: currentYear })}
           </p>
           <div className="flex gap-8">
-            <Link to="/privacy" className="text-surface/40 hover:text-surface text-sm transition-colors font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Privacy Policy</Link>
-            <Link to="/terms" className="text-surface/40 hover:text-surface text-sm transition-colors font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Terms of Service</Link>
+            <Link to="/privacy" className="text-surface/40 hover:text-surface text-sm transition-colors font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{t('footer.privacyPolicy')}</Link>
+            <Link to="/terms" className="text-surface/40 hover:text-surface text-sm transition-colors font-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{t('footer.termsOfService')}</Link>
           </div>
         </div>
       </div>

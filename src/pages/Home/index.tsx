@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { GeoHead } from '@/seo/GeoHead';
 import { Button } from '@/components/ui/Button';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -18,6 +19,7 @@ import {
 import { ShieldCheck } from 'lucide-react';
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedDoctor, setSelectedDoctor] = React.useState('');
 
@@ -49,12 +51,12 @@ const Home: React.FC = () => {
             {/* Hero Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
               <ShieldCheck size={15} className="text-accent" />
-              <span className="text-accent font-bold text-[11px] lg:text-[13px]">Medical Care for International Travelers</span>
+              <span className="text-accent font-bold text-[11px] lg:text-[13px]">{t('home.badge')}</span>
             </div>
 
             {/* Title */}
             <h1 className="text-[40px] lg:text-[62px] leading-[1.1] text-secondary font-heading font-bold w-full max-w-[350px] lg:max-w-[650px]">
-              I need <span className="text-primary italic">Doctor In</span> <br />
+              {t('home.title1')} <span className="text-primary italic">{t('home.title2')}</span> <br />
               <span className="text-secondary min-h-[1.2em]">
                 {displayText}
                 <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 animate-pulse" />
@@ -63,8 +65,7 @@ const Home: React.FC = () => {
 
             {/* Description */}
             <p className="text-base lg:text-[17px] leading-[1.6] lg:leading-[1.7] text-[#4A5568] w-full max-w-[320px] lg:max-w-[500px]">
-              Certified doctors — at your hotel, home or anywhere in Latin America.
-              Available 24/7 in English, French, German & more.
+              {t('home.desc')}
             </p>
 
             {/* Hero Buttons */}
@@ -75,7 +76,7 @@ const Home: React.FC = () => {
                 size="lg"
                 className="w-full lg:w-auto !rounded-full !px-10 shadow-lg"
               >
-                Emergency Support
+                {t('home.emergencyBtn')}
               </Button>
               <Button
                 onClick={() => openBooking('Appointment')}
@@ -83,7 +84,7 @@ const Home: React.FC = () => {
                 size="lg"
                 className="w-full lg:w-auto !rounded-full !px-10 shadow-xl"
               >
-                Book Now
+                {t('common.bookNow')}
               </Button>
             </div>
           </div>
@@ -105,7 +106,12 @@ const Home: React.FC = () => {
       {/* Trust Bar - Responsive */}
       <div className="w-full bg-secondary lg:h-20 py-8 lg:py-0 flex items-center px-6 lg:px-20">
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:flex lg:justify-between items-center w-full gap-8 lg:gap-x-16">
-          {TRUST_BAR_ITEMS.map((item, i) => (
+          {[
+            { icon: TRUST_BAR_ITEMS[0].icon, title: t('home.trustBar.emergency'), sub: t('home.trustBar.emergencySub') },
+            { icon: TRUST_BAR_ITEMS[1].icon, title: t('home.trustBar.multilingual'), sub: t('home.trustBar.multilingualSub') },
+            { icon: TRUST_BAR_ITEMS[2].icon, title: t('home.trustBar.location'), sub: t('home.trustBar.locationSub') },
+            { icon: TRUST_BAR_ITEMS[3].icon, title: t('home.trustBar.certified'), sub: t('home.trustBar.certifiedSub') },
+          ].map((item, i) => (
             <React.Fragment key={i}>
               <div className="flex items-center gap-3 shrink-0">
                 <item.icon size={22} className="text-surface" />
@@ -124,15 +130,15 @@ const Home: React.FC = () => {
       <section className="bg-surface py-20 px-6 lg:px-20">
         <div className="max-w-[1440px] mx-auto">
           <SectionHeader
-            title="Get Medical Help in 3 Easy Steps"
-            description="No need to navigate a foreign healthcare system alone. We handle everything."
+            title={t('home.stepsTitle')}
+            description={t('home.stepsDesc')}
             className="!mb-[64px]"
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
             {[
-              { num: '01', title: 'Contact Us', desc: 'Call, WhatsApp or book online. We respond in minutes in your language.' },
-              { num: '02', title: 'Doctor Visits You', desc: 'A certified specialist comes to your hotel, home or clinic near you.' },
-              { num: '03', title: 'Get Treatment & Follow-up', desc: 'Receive prescription, lab referrals and follow-up care digitally.' },
+              { num: '01', title: t('home.step1Title'), desc: t('home.step1Desc') },
+              { num: '02', title: t('home.step2Title'), desc: t('home.step2Desc') },
+              { num: '03', title: t('home.step3Title'), desc: t('home.step3Desc') },
             ].map((step, idx) => (
               <div key={idx} className="flex flex-col items-center text-center group">
                 <div className={`w-16 h-16 text-surface text-xl font-heading font-black flex items-center justify-center rounded-full mb-5 shadow-lg border-surface transition-transform duration-500 group-hover:scale-110 ${idx === 0 ? 'bg-primary shadow-primary/40' : idx === 1 ? 'bg-secondary shadow-secondary/40' : 'bg-accent shadow-accent/40'}`}>
@@ -166,11 +172,10 @@ const Home: React.FC = () => {
 
               <div className="space-y-4">
                 <h2 className="text-[32px] lg:text-[48px] font-heading font-bold text-secondary leading-tight">
-                  High-Level Multilingual, Qualified and Certified Specialists.
+                  {t('home.specTitle')}
                 </h2>
                 <p className="text-lg text-dark-alt/60 font-body">
-                  Find doctors wherever you are across South America.
-                  Immediate attention via Email or WhatsApp.
+                  {t('home.specDesc')}
                 </p>
               </div>
             </div>
@@ -181,7 +186,7 @@ const Home: React.FC = () => {
                 variant="primary"
                 className="!rounded-[30px] !px-12 !py-5 !text-lg !font-bold shadow-xl hover:shadow-primary/20 transition-all hover:-translate-y-1 w-full lg:w-auto"
               >
-                Book Now
+                {t('common.bookNow')}
               </Button>
             </div>
           </div>
@@ -205,12 +210,17 @@ const Home: React.FC = () => {
       <section id="services" className="w-full py-20 lg:py-[100px] px-6 lg:px-20 bg-white">
         <div className="max-w-[1440px] mx-auto">
           <SectionHeader
-            title="How Can We Help You?"
-            description="Premium medical services tailored for international travelers and expats."
+            title={t('home.servicesTitle')}
+            description={t('home.servicesDesc')}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-16">
-            {SERVICES.map((service, idx) => (
+            {[
+              { ...SERVICES[0], title: t('home.services.emergencyCare'), desc: t('home.services.emergencyCareDesc') },
+              { ...SERVICES[1], title: t('home.services.appointment'), desc: t('home.services.appointmentDesc') },
+              { ...SERVICES[2], title: t('home.services.specialist'), desc: t('home.services.specialistDesc') },
+              { ...SERVICES[3], title: t('home.services.labs'), desc: t('home.services.labsDesc') },
+            ].map((service, idx) => (
               <div
                 key={idx}
                 className="group bg-surface-alt p-10 rounded-[32px] border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-premium transition-all duration-500 hover:-translate-y-2 cursor-default flex flex-col h-full"
@@ -224,7 +234,7 @@ const Home: React.FC = () => {
                   onClick={() => openBooking(service.title)}
                   className="flex items-center gap-2 text-primary font-bold font-body group/btn mt-auto"
                 >
-                  Book Now
+                  {t('common.bookNow')}
                   <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
                 </button>
               </div>
@@ -245,8 +255,8 @@ const Home: React.FC = () => {
         <div className="max-w-[1440px] mx-auto relative z-10">
           <SectionHeader
             isLight
-            title="What Travelers Say About Us"
-            description="Real stories from international travelers and expats who trusted Doctor In."
+            title={t('home.testTitle')}
+            description={t('home.testDesc')}
             className="!mb-[48px]"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -267,10 +277,10 @@ const Home: React.FC = () => {
       <section className="py-20 px-6 lg:px-20 max-w-[1440px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
           <div className="max-w-[600px] text-center md:text-left">
-            <h2 className="text-4xl lg:text-[40px] font-heading font-bold text-secondary mb-3">Health Tips for Travelers in Latin America</h2>
-            <p className="text-lg text-dark-alt/60 font-body">Expert advice on staying healthy during your Latin American adventure.</p>
+            <h2 className="text-4xl lg:text-[40px] font-heading font-bold text-secondary mb-3">{t('home.blogTitle')}</h2>
+            <p className="text-lg text-dark-alt/60 font-body">{t('home.blogDesc')}</p>
           </div>
-          <Button variant="outline" className="!px-6 !py-2.5 !text-sm">View All Articles</Button>
+          <Button variant="outline" className="!px-6 !py-2.5 !text-sm">{t('home.viewAll')}</Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -292,16 +302,16 @@ const Home: React.FC = () => {
       <section className="w-full bg-primary py-10 lg:py-[60px] px-6 lg:px-20 relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row justify-between items-center gap-12 relative z-10">
           <div className="flex-1 text-center lg:text-left">
-            <h2 className="text-surface text-[28px] lg:text-[40px] font-heading font-bold mb-3 leading-tight">Medical Emergency in Latam?</h2>
+            <h2 className="text-surface text-[28px] lg:text-[40px] font-heading font-bold mb-3 leading-tight">{t('home.ctaTitle')}</h2>
             <p className="text-white/80 text-base lg:text-lg font-body max-w-[600px] mx-auto lg:mx-0 leading-relaxed">
-              Don't wait. Our medical team is on call 24/7. We speak your language and come to you.
+              {t('home.ctaDesc')}
             </p>
           </div>
           <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
             <Button variant="light" size="lg" className="w-full lg:w-auto !text-primary font-bold shadow-2xl">
-              Call Emergency Now
+              {t('home.callEmergency')}
             </Button>
-            <span className="text-white/60 font-body text-sm font-medium">Or WhatsApp: +51 XXX XXX XXXX</span>
+            <span className="text-white/60 font-body text-sm font-medium">{t('home.orWhatsapp')}</span>
           </div>
         </div>
       </section>
