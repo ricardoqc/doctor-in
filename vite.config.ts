@@ -14,4 +14,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Añade este bloque para permitir el dominio en producción
+  preview: {
+    allowedHosts: ['doctor-in.com', 'www.doctor-in.com'],
+    // Nota: También puedes usar `allowedHosts: true` para permitir cualquier dominio
+  }
 });
