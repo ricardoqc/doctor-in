@@ -2,7 +2,6 @@
   "name": "doctor-in-peru",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "engines": {
     "node": ">=22.13.0"
   },
@@ -17,13 +16,10 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "@graphql-codegen/cli": "^7.0.0",
     "@tailwindcss/vite": "^4.3.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "autoprefixer": "^10.5.0",
-    "postcss": "^8.5.14",
     "sass": "^1.99.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",

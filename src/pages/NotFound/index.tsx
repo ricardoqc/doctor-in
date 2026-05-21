@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Home, ArrowRight, ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const NotFoundPage: React.FC = () => {
+const NotFoundPage: React.FC = () => {
   const { t } = useTranslation();
   return (
     <div className="w-full min-h-screen bg-secondary text-surface flex flex-col justify-center items-center px-6 relative overflow-hidden">
