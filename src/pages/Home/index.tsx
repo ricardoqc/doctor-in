@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@apollo/client/react';
+import { Link } from 'react-router-dom';
 import { GeoHead } from '@/seo/GeoHead';
 import { Button } from '@/components/ui/Button';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -8,23 +10,60 @@ import { TestimonialCard } from './components/TestimonialCard';
 import { BlogCard } from '@/features/articles/ui/BlogCard';
 import { BookingModal } from './components/BookingModal';
 import { useTypewriter } from '@/hooks/useTypewriter';
+import { GET_POSTS } from '@/features/articles/api/queries';
 import {
   CITIES,
   TRUST_BAR_ITEMS,
   SERVICES,
   DOCTORS,
-  TESTIMONIALS,
-  MOCK_ARTICLES
+  TESTIMONIALS
 } from '@/config/mockData';
 import { ShieldCheck } from 'lucide-react';
 
+const stripHtml = (html: string) => {
+  if (!html) return '';
+  let clean = html.replace(/<[^>]*>/g, '');
+  return clean
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+};
+
+const formatDate = (dateString: string, locale: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  } catch (e) {
+    return dateString;
+  }
+};
+
+
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedDoctor, setSelectedDoctor] = React.useState('');
 
+  const { data, loading } = useQuery<any>(GET_POSTS, {
+    fetchPolicy: 'cache-first'
+  });
+
+  const posts = data?.posts?.nodes?.slice(0, 3) || [];
+
   // Bulletproof typewriter loop decoupled using custom hook
   const displayText = useTypewriter(CITIES);
+
 
   const openBooking = (name: string) => {
     setSelectedDoctor(name);
@@ -280,23 +319,57 @@ const Home: React.FC = () => {
             <h2 className="text-4xl lg:text-[40px] font-heading font-bold text-secondary mb-3">{t('home.blogTitle')}</h2>
             <p className="text-lg text-dark-alt/60 font-body">{t('home.blogDesc')}</p>
           </div>
-          <Button variant="outline" className="!px-6 !py-2.5 !text-sm">{t('home.viewAll')}</Button>
+          <Link to="/blog">
+            <Button variant="outline" className="!px-6 !py-2.5 !text-sm cursor-pointer">{t('home.viewAll')}</Button>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MOCK_ARTICLES.map((art) => (
-            <BlogCard
-              key={art.id}
-              title={art.title}
-              category={art.category}
-              excerpt={art.excerpt}
-              image={art.image}
-              date={art.date}
-              slug={art.slug}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="flex flex-col h-full bg-surface-alt rounded-3xl overflow-hidden border border-surface-alt/50">
+                <div className="h-56 bg-dark-alt/5" />
+                <div className="p-8 flex-grow space-y-4">
+                  <div className="h-4 bg-dark-alt/5 rounded w-1/4" />
+                  <div className="h-8 bg-dark-alt/10 rounded w-3/4" />
+                  <div className="space-y-2">
+                    <div className="h-4 bg-dark-alt/5 rounded w-full" />
+                    <div className="h-4 bg-dark-alt/5 rounded w-5/6" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="text-center py-12 bg-surface-alt rounded-[32px] border border-surface-alt">
+            <p className="text-dark-alt/60 font-body">
+              {currentLang.startsWith('es') ? 'Pronto habrá nuevos artículos en español.' : 'Check back soon for new articles.'}
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((art: any) => {
+              const cleanedExcerpt = stripHtml(art.excerpt);
+              const firstCategory = art.categories?.nodes?.[0]?.name || 'Travel Health';
+              const formattedDate = formatDate(art.date, currentLang);
+              const featuredImg = art.featuredImage?.node?.sourceUrl || '/images/blog_travel_health_1778509526333.png';
+
+              return (
+                <BlogCard
+                  key={art.id}
+                  title={art.title}
+                  category={firstCategory}
+                  excerpt={cleanedExcerpt}
+                  image={featuredImg}
+                  date={formattedDate}
+                  slug={art.slug}
+                />
+              );
+            })}
+          </div>
+        )}
       </section>
+
 
       {/* Emergency CTA Band */}
       <section className="w-full bg-primary py-10 lg:py-[60px] px-6 lg:px-20 relative overflow-hidden">

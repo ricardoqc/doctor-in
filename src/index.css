@@ -30,3 +30,43 @@
     @apply font-heading mt-0;
   }
 }
+
+/* WordPress Content Styles */
+.wordpress-content p {
+  @apply mb-6 text-dark-alt/80 text-[18px] font-body leading-[1.8];
+}
+.wordpress-content h1,
+.wordpress-content h2,
+.wordpress-content h3,
+.wordpress-content h4,
+.wordpress-content h5,
+.wordpress-content h6 {
+  @apply text-secondary font-heading font-bold mt-10 mb-4 leading-tight;
+}
+.wordpress-content h1 { @apply text-4xl lg:text-[40px]; }
+.wordpress-content h2 { @apply text-[28px] lg:text-[32px]; }
+.wordpress-content h3 { @apply text-2xl; }
+.wordpress-content h4 { @apply text-xl; }
+
+.wordpress-content ul {
+  @apply list-disc pl-6 mb-6 space-y-2 text-dark-alt/80 text-[18px] font-body;
+}
+.wordpress-content ol {
+  @apply list-decimal pl-6 mb-6 space-y-2 text-dark-alt/80 text-[18px] font-body;
+}
+.wordpress-content a {
+  @apply text-primary font-semibold underline hover:text-secondary transition-colors;
+}
+.wordpress-content blockquote {
+  @apply bg-accent/5 border-l-4 border-accent rounded-r-2xl p-6 my-8 font-body font-bold italic leading-relaxed text-secondary text-lg;
+}
+.wordpress-content img {
+  @apply rounded-[24px] max-w-full h-auto my-8 shadow-premium;
+}
+.wordpress-content figure {
+  @apply my-8;
+}
+.wordpress-content figure figcaption {
+  @apply text-center text-sm text-dark-alt/50 mt-2 font-body;
+}
+

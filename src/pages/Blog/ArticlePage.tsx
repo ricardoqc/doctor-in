@@ -1,14 +1,168 @@
-import React from 'react';
-import { Calendar, Clock, ChevronRight, PhoneCall, MessageCircle, Share2, Info } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useQuery } from '@apollo/client/react';
+import { useTranslation } from 'react-i18next';
+import { Calendar, Clock, ChevronRight, PhoneCall, MessageCircle, Share2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { GeoHead } from '@/seo/GeoHead';
+import { GET_POST_BY_SLUG, GET_POSTS } from '@/features/articles/api/queries';
+
+const stripHtml = (html: string) => {
+  if (!html) return '';
+  let clean = html.replace(/<[^>]*>/g, '');
+  return clean
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+};
+
+const formatDate = (dateString: string, locale: string) => {
+  if (!dateString) return '';
+  try {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  } catch (e) {
+    return dateString;
+  }
+};
+
+const calculateReadTime = (htmlContent: string) => {
+  if (!htmlContent) return 1;
+  const text = htmlContent.replace(/<[^>]*>/g, '');
+  const wordCount = text.trim().split(/\s+/).length;
+  const wordsPerMinute = 200;
+  return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+};
 
 export const ArticlePage: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
+
+  const { data, loading, error } = useQuery<any>(GET_POST_BY_SLUG, {
+    variables: { slug },
+    skip: !slug,
+    fetchPolicy: 'network-only'
+  });
+
+  const { data: recentData } = useQuery<any>(GET_POSTS, {
+    fetchPolicy: 'cache-first'
+  });
+
+  const post = data?.post;
+  const recentPosts = recentData?.posts?.nodes || [];
+
+  // Keep a ref of the current post so we can access translations synchronously
+  // on the languageChanged event — before any async state updates happen.
+  const postRef = useRef<any>(null);
+  useEffect(() => {
+    if (post) postRef.current = post;
+  }, [post]);
+
+  // Listen to i18n language changes and redirect to the correct translation immediately.
+  // We use the i18n event directly (instead of depending on Apollo state) so that
+  // we navigate BEFORE any re-fetch occurs, avoiding race conditions.
+  useEffect(() => {
+    const handleLanguageChange = (newLang: string) => {
+      const currentPost = postRef.current;
+      if (!currentPost || !slug) return;
+
+      const normalizedNewLang = newLang.startsWith('en') ? 'en' : 'es';
+      const postLang = currentPost.uri?.startsWith('/en/') ? 'en' : 'es';
+
+      if (postLang === normalizedNewLang) return; // Already correct language, nothing to do
+
+      const translationsList: any[] = currentPost.translations || [];
+      const matchingTranslation = translationsList.find((t: any) => {
+        const lang = t.uri?.startsWith('/en/') ? 'en' : 'es';
+        return lang === normalizedNewLang;
+      });
+
+      if (matchingTranslation?.slug) {
+        navigate(`/blog/${matchingTranslation.slug}`, { replace: true });
+      } else {
+        navigate('/blog', { replace: true });
+      }
+    };
+
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, [i18n, slug, navigate]);
+
+
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-white flex flex-col justify-center items-center gap-4">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-secondary font-body text-sm font-semibold animate-pulse">
+          {currentLang.startsWith('es') ? 'Cargando artículo...' : 'Loading article...'}
+        </p>
+      </div>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <div className="w-full bg-white py-24 px-6">
+        <div className="max-w-[600px] mx-auto text-center space-y-6">
+          <h1 className="text-secondary text-3xl font-heading font-bold">
+            {currentLang.startsWith('es') ? 'Artículo no encontrado' : 'Article not found'}
+          </h1>
+          <p className="text-dark-alt/60 font-body">
+            {error 
+              ? error.message 
+              : (currentLang.startsWith('es') 
+                  ? 'Lo sentimos, la entrada de blog que buscas no existe o fue movida.' 
+                  : 'Sorry, the blog post you are looking for does not exist or has been moved.')}
+          </p>
+          <Link to="/blog">
+            <Button variant="primary" className="mt-4 flex gap-2 items-center mx-auto">
+              <ArrowLeft size={16} />
+              {currentLang.startsWith('es') ? 'Volver al Blog' : 'Back to Blog'}
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const readTime = calculateReadTime(post.content || '');
+  const formattedDate = formatDate(post.date, currentLang);
+  const featuredImg = post.featuredImage?.node?.sourceUrl || '/images/blog_travel_health_1778509526333.png';
+  const authorName = post.author?.node?.name || 'Doctor In';
+  const authorAvatar = post.author?.node?.avatar?.url || '/images/generated-1778086207159.png';
+  const firstCategory = post.categories?.nodes?.[0]?.name || 'Travel Health';
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": post.title,
+    "datePublished": post.date,
+    "image": [featuredImg],
+    "author": {
+      "@type": "Person",
+      "name": authorName
+    }
+  };
+
   return (
     <div className="w-full bg-white">
       <GeoHead 
-        title="Altitude Sickness Guide for Latam | Doctor In Blog"
-        description="A complete traveler's guide on how to deal with altitude sickness in Cusco and other high-altitude destinations across Latin America."
+        title={`${post.title} | Doctor In Blog`}
+        description={stripHtml(post.excerpt).substring(0, 155)}
+        jsonLd={jsonLd}
       />
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-20 pt-[120px] pb-20">
@@ -18,28 +172,30 @@ export const ArticlePage: React.FC = () => {
           <article className="flex-1 max-w-[800px]">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 mb-8 text-sm font-body">
-              <span className="text-primary hover:underline cursor-pointer">Home</span>
+              <Link to="/" className="text-primary hover:underline cursor-pointer">Home</Link>
               <ChevronRight size={14} className="text-dark-alt/30" />
-              <span className="text-primary hover:underline cursor-pointer">Blog</span>
+              <Link to="/blog" className="text-primary hover:underline cursor-pointer">Blog</Link>
               <ChevronRight size={14} className="text-dark-alt/30" />
-              <span className="text-dark-alt/60">Health & Travel in Latam</span>
+              <span className="text-dark-alt/60">{firstCategory}</span>
             </nav>
 
             {/* Title */}
             <h1 className="text-secondary text-[32px] lg:text-[48px] font-heading font-bold leading-[1.2] mb-8">
-              How to Deal with Altitude Sickness in Latam: A Complete Traveler's Guide
+              {post.title}
             </h1>
 
             {/* Author Row */}
             <div className="flex items-center gap-4 mb-10 pb-10 border-b border-surface-alt">
               <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center overflow-hidden">
-                <img src="/images/generated-1778086207159.png" alt="Author" className="w-full h-full object-cover" />
+                <img src={authorAvatar} alt={authorName} className="w-full h-full object-cover" />
               </div>
               <div>
-                <p className="text-secondary font-heading font-bold">Dr. Maria Gonzalez</p>
+                <p className="text-secondary font-heading font-bold">{authorName}</p>
                 <div className="flex items-center gap-4 text-dark-alt/50 text-xs mt-1 font-body">
-                  <span className="flex items-center gap-1.5"><Calendar size={14} /> May 15, 2025</span>
-                  <span className="flex items-center gap-1.5"><Clock size={14} /> 8 min read</span>
+                  <span className="flex items-center gap-1.5"><Calendar size={14} /> {formattedDate}</span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={14} /> {readTime} {currentLang.startsWith('es') ? 'min de lectura' : 'min read'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -47,74 +203,28 @@ export const ArticlePage: React.FC = () => {
             {/* Hero Image */}
             <div className="mb-12">
               <img 
-                src="/images/generated-1778255629702.png" 
-                alt="Traveler in Latam" 
+                src={featuredImg} 
+                alt={post.title} 
                 className="w-full h-[300px] lg:h-[450px] object-cover rounded-[32px] shadow-premium"
               />
             </div>
 
-            {/* Article Body */}
-            <div className="space-y-8 text-dark-alt/80 text-[18px] font-body leading-[1.8]">
-              <p>
-                Many iconic destinations in Latin America, from Cusco to La Paz or Bogota, sit at high elevations. While these cities offer magnificent experiences, the high altitude can pose a significant challenge for many international visitors. Known locally as 'Soroche', altitude sickness is a common ailment that shouldn't be underestimated.
-              </p>
-
-              <h2 className="text-secondary text-[28px] font-heading font-bold mt-12 mb-4">Recognizing the Symptoms</h2>
-              <p>
-                Symptoms usually develop within 6 to 24 hours of reaching high altitude. Look out for headache, nausea, dizziness, fatigue, and shortness of breath. If you experience these, it's crucial to stop ascending and rest.
-              </p>
-
-              {/* Quote Block */}
-              <div className="bg-accent/10 border border-accent/30 rounded-[24px] p-8 lg:p-10 my-12 relative">
-                <div className="absolute top-[-20px] left-8 w-10 h-10 bg-accent rounded-full flex items-center justify-center text-secondary shadow-lg">
-                  <Info size={20} />
-                </div>
-                <p className="text-secondary text-[20px] lg:text-[22px] font-body font-bold italic leading-relaxed">
-                  "The key to beating altitude sickness is acclimatization. Give your body at least 24 to 48 hours of rest upon arriving in a high-altitude city before engaging in strenuous activities."
-                </p>
-              </div>
-
-              <h2 className="text-secondary text-[28px] font-heading font-bold mt-12 mb-4">When to Seek Medical Help</h2>
-              <p>
-                If symptoms worsen or you experience severe shortness of breath at rest, confusion, or inability to walk, seek immediate medical attention. Our English-speaking doctors across Latin America are available 24/7 to provide oxygen therapy and necessary medications right at your hotel.
-              </p>
-
-              {/* Comparison Table */}
-              <div className="my-12 overflow-hidden rounded-[24px] border border-surface-alt shadow-premium">
-                <div className="bg-secondary p-6">
-                  <h3 className="text-surface font-heading font-bold text-xl">Mild Soroche vs. Severe Altitude Sickness</h3>
-                </div>
-                <div className="grid grid-cols-2 bg-surface-alt font-bold p-4 border-b border-surface-alt text-secondary">
-                  <div>Mild Symptoms</div>
-                  <div>Severe Warnings</div>
-                </div>
-                <div className="grid grid-cols-2 p-6 gap-6">
-                  <ul className="space-y-3 list-disc pl-4 text-sm">
-                    <li>Slight headache</li>
-                    <li>Loss of appetite</li>
-                    <li>Difficulty sleeping</li>
-                    <li>Nausea</li>
-                  </ul>
-                  <ul className="space-y-3 list-disc pl-4 text-sm text-primary font-medium">
-                    <li>Persistent vomiting</li>
-                    <li>Confusion / Disorientation</li>
-                    <li>Difficulty breathing at rest</li>
-                    <li>Fluid in lungs (HEOP)</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            {/* Article Body (WordPress Content) */}
+            <div 
+              className="wordpress-content"
+              dangerouslySetInnerHTML={{ __html: post.content || '' }}
+            />
 
             {/* Social Share */}
             <div className="mt-16 pt-8 border-t border-surface-alt flex items-center justify-between">
               <span className="text-secondary font-heading font-bold flex items-center gap-2">
-                <Share2 size={18} /> Share this guide
+                <Share2 size={18} /> {currentLang.startsWith('es') ? 'Comparte esta guía' : 'Share this guide'}
               </span>
               <div className="flex gap-4">
-                <button className="w-10 h-10 rounded-full bg-surface-alt hover:bg-accent/20 transition-all flex items-center justify-center text-secondary">
+                <button className="w-10 h-10 rounded-full bg-surface-alt hover:bg-accent/20 transition-all flex items-center justify-center text-secondary cursor-pointer">
                   <MessageCircle size={18} />
                 </button>
-                <button className="w-10 h-10 rounded-full bg-surface-alt hover:bg-accent/20 transition-all flex items-center justify-center text-secondary">
+                <button className="w-10 h-10 rounded-full bg-surface-alt hover:bg-accent/20 transition-all flex items-center justify-center text-secondary cursor-pointer">
                   <Share2 size={18} />
                 </button>
               </div>
@@ -128,37 +238,47 @@ export const ArticlePage: React.FC = () => {
             <div className="bg-primary p-8 lg:p-10 rounded-[32px] text-surface shadow-urgent relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:scale-125 transition-transform duration-700" />
               <h3 className="text-[24px] lg:text-[28px] font-heading font-bold mb-4 relative z-10 leading-tight">
-                Medical Emergency?
+                {currentLang.startsWith('es') ? '¿Emergencia Médica?' : 'Medical Emergency?'}
               </h3>
               <p className="text-white/80 font-body text-base mb-8 relative z-10">
-                Our English-speaking doctors can assist you directly at your hotel across Latin America. 24/7 Availability.
+                {currentLang.startsWith('es') 
+                  ? 'Nuestros médicos de habla inglesa te atienden directamente en tu hotel en toda Latinoamérica. Disponibles 24/7.' 
+                  : 'Our English-speaking doctors can assist you directly at your hotel across Latin America. 24/7 Availability.'}
               </p>
               <Button variant="light" size="lg" className="w-full !text-primary font-bold shadow-2xl flex gap-3 items-center relative z-10">
                 <PhoneCall size={20} />
-                Call Doctor Now
+                {currentLang.startsWith('es') ? 'Llamar Doctor Ahora' : 'Call Doctor Now'}
               </Button>
             </div>
 
-            {/* Popular Articles */}
+            {/* Popular/Recent Articles */}
             <div className="bg-surface-alt p-8 rounded-[32px] border border-surface-alt/50">
-              <h4 className="text-secondary text-[20px] font-heading font-bold mb-6">Popular Articles</h4>
+              <h4 className="text-secondary text-[20px] font-heading font-bold mb-6">
+                {currentLang.startsWith('es') ? 'Artículos Recientes' : 'Recent Articles'}
+              </h4>
               <div className="space-y-6">
-                {[
-                  { title: 'Vaccinations for Latin America', date: 'April 12, 2025', image: '/images/generated-1778253582567.png' },
-                  { title: 'Safe Street Food Guide', date: 'March 28, 2025', image: '/images/generated-1778253582567.png' }
-                ].map((art, idx) => (
-                  <div key={idx} className="flex gap-4 group cursor-pointer">
-                    <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0">
-                      <img src={art.image} alt={art.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                    </div>
-                    <div className="flex flex-col justify-center">
-                      <h5 className="text-secondary font-heading font-bold text-sm leading-tight group-hover:text-primary transition-colors">{art.title}</h5>
-                      <span className="text-dark-alt/40 text-[12px] mt-1 font-body">{art.date}</span>
-                    </div>
-                  </div>
-                ))}
+                {recentPosts
+                  .filter((p: any) => p.slug !== slug)
+                  .slice(0, 3)
+                  .map((art: any) => {
+                    const formattedArtDate = formatDate(art.date, currentLang);
+                    const artImg = art.featuredImage?.node?.sourceUrl || '/images/blog_travel_health_1778509526333.png';
+                    return (
+                      <Link key={art.id} to={`/blog/${art.slug}`} className="flex gap-4 group cursor-pointer">
+                        <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 bg-dark-alt/5">
+                          <img src={artImg} alt={art.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                        <div className="flex flex-col justify-center">
+                          <h5 className="text-secondary font-heading font-bold text-sm leading-tight group-hover:text-primary transition-colors">{art.title}</h5>
+                          <span className="text-dark-alt/40 text-[12px] mt-1 font-body">{formattedArtDate}</span>
+                        </div>
+                      </Link>
+                    );
+                  })}
               </div>
-              <button className="w-full text-primary font-heading font-bold text-sm mt-8 hover:underline">View All Articles</button>
+              <Link to="/blog" className="block w-full text-center text-primary font-heading font-bold text-sm mt-8 hover:underline">
+                {currentLang.startsWith('es') ? 'Ver Todos los Artículos' : 'View All Articles'}
+              </Link>
             </div>
 
           </aside>
@@ -168,3 +288,4 @@ export const ArticlePage: React.FC = () => {
     </div>
   );
 };
+
