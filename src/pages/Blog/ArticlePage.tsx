@@ -1,52 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import { Calendar, Clock, ChevronRight, PhoneCall, MessageCircle, Share2, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, ChevronRight, MessageCircle, Share2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { GeoHead } from '@/seo/GeoHead';
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
+import { stripHtml, formatDate, calculateReadTime } from '@/utils/format';
 import { GET_POST_BY_SLUG, GET_POSTS } from '@/features/articles/api/queries';
 
-const stripHtml = (html: string) => {
-  if (!html) return '';
-  let clean = html.replace(/<[^>]*>/g, '');
-  return clean
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#8217;/g, "'")
-    .replace(/&#8216;/g, "'")
-    .replace(/&#8211;/g, "–")
-    .replace(/&#8212;/g, "—")
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
-};
-
-const formatDate = (dateString: string, locale: string) => {
-  if (!dateString) return '';
-  try {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat(locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
-  } catch (e) {
-    return dateString;
-  }
-};
-
-const calculateReadTime = (htmlContent: string) => {
-  if (!htmlContent) return 1;
-  const text = htmlContent.replace(/<[^>]*>/g, '');
-  const wordCount = text.trim().split(/\s+/).length;
-  const wordsPerMinute = 200;
-  return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
-};
 
 export const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
 
   const { data, loading, error } = useQuery<any>(GET_POST_BY_SLUG, {
@@ -56,11 +23,30 @@ export const ArticlePage: React.FC = () => {
   });
 
   const { data: recentData } = useQuery<any>(GET_POSTS, {
+    variables: { language: currentLang.toUpperCase() },
     fetchPolicy: 'cache-first'
   });
 
   const post = data?.post;
   const recentPosts = recentData?.posts?.nodes || [];
+
+  const [activePost, setActivePost] = useState<any>(null);
+
+  useEffect(() => {
+    if (post) {
+      setActivePost(post);
+    }
+  }, [post]);
+
+  useEffect(() => {
+    // If the new slug is NOT a translation of the currently active post, clear it
+    if (activePost && activePost.slug !== slug) {
+      const isTranslation = activePost.translations?.some((t: any) => t.slug === slug);
+      if (!isTranslation) {
+        setActivePost(null);
+      }
+    }
+  }, [slug, activePost]);
 
   // Keep a ref of the current post so we can access translations synchronously
   // on the languageChanged event — before any async state updates happen.
@@ -101,8 +87,9 @@ export const ArticlePage: React.FC = () => {
     };
   }, [i18n, slug, navigate]);
 
+  const postToRender = activePost || post;
 
-  if (loading) {
+  if (loading && !postToRender) {
     return (
       <div className="w-full min-h-screen bg-white flex flex-col justify-center items-center gap-4">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -113,7 +100,7 @@ export const ArticlePage: React.FC = () => {
     );
   }
 
-  if (error || !post) {
+  if (error || (!loading && !postToRender)) {
     return (
       <div className="w-full bg-white py-24 px-6">
         <div className="max-w-[600px] mx-auto text-center space-y-6">
@@ -138,18 +125,18 @@ export const ArticlePage: React.FC = () => {
     );
   }
 
-  const readTime = calculateReadTime(post.content || '');
-  const formattedDate = formatDate(post.date, currentLang);
-  const featuredImg = post.featuredImage?.node?.sourceUrl || '/images/blog_travel_health_1778509526333.png';
-  const authorName = post.author?.node?.name || 'Doctor In';
-  const authorAvatar = post.author?.node?.avatar?.url || '/images/generated-1778086207159.png';
-  const firstCategory = post.categories?.nodes?.[0]?.name || 'Travel Health';
+  const readTime = calculateReadTime(postToRender.content || '');
+  const formattedDate = formatDate(postToRender.date, currentLang);
+  const featuredImg = postToRender.featuredImage?.node?.sourceUrl || '/images/blog_travel_health_1778509526333.png';
+  const authorName = postToRender.author?.node?.name || 'Doctor In';
+  const authorAvatar = postToRender.author?.node?.avatar?.url || '/images/generated-1778086207159.png';
+  const firstCategory = postToRender.categories?.nodes?.[0]?.name || 'Travel Health';
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    "headline": post.title,
-    "datePublished": post.date,
+    "headline": postToRender.title,
+    "datePublished": postToRender.date,
     "image": [featuredImg],
     "author": {
       "@type": "Person",
@@ -158,10 +145,10 @@ export const ArticlePage: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-white">
+    <div className={`w-full bg-white transition-opacity duration-300 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
       <GeoHead 
-        title={`${post.title} | Doctor In Blog`}
-        description={stripHtml(post.excerpt).substring(0, 155)}
+        title={`${postToRender.title} | Doctor In Blog`}
+        description={stripHtml(postToRender.excerpt || '').substring(0, 155)}
         jsonLd={jsonLd}
       />
 
@@ -181,7 +168,7 @@ export const ArticlePage: React.FC = () => {
 
             {/* Title */}
             <h1 className="text-secondary text-[32px] lg:text-[48px] font-heading font-bold leading-[1.2] mb-8">
-              {post.title}
+              {postToRender.title}
             </h1>
 
             {/* Author Row */}
@@ -204,7 +191,7 @@ export const ArticlePage: React.FC = () => {
             <div className="mb-12">
               <img 
                 src={featuredImg} 
-                alt={post.title} 
+                alt={postToRender.title} 
                 className="w-full h-[300px] lg:h-[450px] object-cover rounded-[32px] shadow-premium"
               />
             </div>
@@ -212,7 +199,7 @@ export const ArticlePage: React.FC = () => {
             {/* Article Body (WordPress Content) */}
             <div 
               className="wordpress-content"
-              dangerouslySetInnerHTML={{ __html: post.content || '' }}
+              dangerouslySetInnerHTML={{ __html: postToRender.content || '' }}
             />
 
             {/* Social Share */}
@@ -245,9 +232,16 @@ export const ArticlePage: React.FC = () => {
                   ? 'Nuestros médicos de habla inglesa te atienden directamente en tu hotel en toda Latinoamérica. Disponibles 24/7.' 
                   : 'Our English-speaking doctors can assist you directly at your hotel across Latin America. 24/7 Availability.'}
               </p>
-              <Button variant="light" size="lg" className="w-full !text-primary font-bold shadow-2xl flex gap-3 items-center relative z-10">
-                <PhoneCall size={20} />
-                {currentLang.startsWith('es') ? 'Llamar Doctor Ahora' : 'Call Doctor Now'}
+              <Button 
+                href={t('common.whatsappEmergencyLink')}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="light" 
+                size="lg" 
+                className="w-full !text-primary font-bold shadow-2xl flex gap-2.5 items-center justify-center relative z-10"
+              >
+                <WhatsAppIcon className="text-primary" />
+                {currentLang.startsWith('es') ? 'WhatsApp Doctor Ahora' : 'WhatsApp Doctor Now'}
               </Button>
             </div>
 

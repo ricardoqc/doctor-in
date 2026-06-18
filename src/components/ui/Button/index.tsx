@@ -6,10 +6,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
+  href?: string;
+  target?: string;
+  rel?: string;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', children, ...props }, ref) => {
+export const Button = React.forwardRef<any, ButtonProps>(
+  ({ className = '', variant = 'primary', size = 'md', children, href, target, rel, ...props }, ref) => {
     
     // Base classes
     const baseClasses = "inline-flex items-center justify-center font-heading font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed rounded-full";
@@ -26,9 +29,24 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       light: "bg-surface text-primary shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(0,0,0,0.2)] focus:ring-surface"
     };
 
+    if (href) {
+      return (
+        <a
+          ref={ref as React.Ref<HTMLAnchorElement>}
+          href={href}
+          target={target}
+          rel={rel}
+          className={`${baseClasses} ${sizeClasses} ${variantClasses[variant]} ${className}`}
+          {...(props as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {children}
+        </a>
+      );
+    }
+
     return (
       <button
-        ref={ref}
+        ref={ref as React.Ref<HTMLButtonElement>}
         className={`${baseClasses} ${sizeClasses} ${variantClasses[variant]} ${className}`}
         {...props}
       >

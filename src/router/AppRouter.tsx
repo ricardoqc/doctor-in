@@ -10,6 +10,7 @@ const ArticlePage = React.lazy(() => import('../pages/Blog/ArticlePage').then(mo
 const ContactPage = React.lazy(() => import('../pages/Contact').then(module => ({ default: module.ContactPage })));
 const TermsPage = React.lazy(() => import('../pages/Terms').then(module => ({ default: module.TermsPage })));
 const PrivacyPage = React.lazy(() => import('../pages/Privacy').then(module => ({ default: module.PrivacyPage })));
+const CookiePolicyPage = React.lazy(() => import('../pages/CookiePolicy').then(module => ({ default: module.CookiePolicyPage })));
 const NotFoundPage = React.lazy(() => import('../pages/NotFound'));
 
 // Loader Component for dynamic lazy bundles transition
@@ -58,6 +59,7 @@ export const AppRouter: React.FC = () => {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/cookie-policy" element={<CookiePolicyPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>

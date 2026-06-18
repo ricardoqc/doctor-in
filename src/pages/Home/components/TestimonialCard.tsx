@@ -4,39 +4,56 @@ import { Star, Quote } from 'lucide-react';
 interface TestimonialCardProps {
   text: string;
   author: string;
-  location: string;
   rating: number;
+  reviewUrl?: string;
 }
 
-export const TestimonialCard: React.FC<TestimonialCardProps> = ({ text, author, location, rating }) => {
-  return (
-    <div className="bg-surface/5 backdrop-blur-md border border-surface/10 p-8 rounded-3xl relative h-full flex flex-col justify-between group hover:bg-surface/10 transition-colors duration-300">
-      <Quote className="absolute top-6 right-8 text-accent/20 w-12 h-12" />
+export const TestimonialCard: React.FC<TestimonialCardProps> = ({ text, author, rating, reviewUrl }) => {
+  const CardContent = (
+    <div className="bg-white p-8 rounded-[32px] shadow-premium hover:shadow-2xl transition-all duration-500 border border-surface-alt relative h-full flex flex-col justify-between hover:-translate-y-1 cursor-pointer">
+      <Quote className="absolute top-6 right-8 text-primary/10 w-10 h-10 pointer-events-none" />
       
       <div>
-        <div className="flex gap-1 mb-6">
+        {/* Stars */}
+        <div className="flex gap-1 mb-5">
           {[...Array(5)].map((_, i) => (
             <Star 
               key={i} 
               size={16} 
-              className={i < rating ? "text-accent fill-accent" : "text-surface/20"} 
+              className={i < rating ? "text-[#FBBF24] fill-[#FBBF24]" : "text-dark-alt/10"} 
             />
           ))}
         </div>
-        <p className="text-surface/80 font-body text-lg leading-relaxed italic mb-8">
+        
+        {/* Review text */}
+        <p className="text-secondary/80 font-body text-[14px] leading-relaxed mb-6 whitespace-pre-line line-clamp-6">
           "{text}"
         </p>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center text-accent font-bold font-heading">
-          {author[0]}
+      {/* Author Details */}
+      <div className="flex items-center gap-4 mt-auto pt-4 border-t border-surface-alt">
+        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold font-heading text-sm">
+          {author ? author[0].toUpperCase() : 'G'}
         </div>
         <div>
-          <h4 className="text-surface font-heading font-bold">{author}</h4>
-          <p className="text-accent text-sm font-medium">{location}</p>
+          <h4 className="text-secondary font-heading font-bold text-[14px]">{author}</h4>
+          <span className="text-[#10B981] text-xs font-semibold flex items-center gap-1 font-body">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] inline-block" />
+            Verified Google Reviewer
+          </span>
         </div>
       </div>
     </div>
   );
+
+  if (reviewUrl) {
+    return (
+      <a href={reviewUrl} target="_blank" rel="noopener noreferrer" className="block h-full focus:outline-none">
+        {CardContent}
+      </a>
+    );
+  }
+
+  return CardContent;
 };

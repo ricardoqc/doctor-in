@@ -5,57 +5,28 @@ import { Link } from 'react-router-dom';
 import { GeoHead } from '@/seo/GeoHead';
 import { Button } from '@/components/ui/Button';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { DoctorCard } from './components/DoctorCard';
 import { TestimonialCard } from './components/TestimonialCard';
 import { BlogCard } from '@/features/articles/ui/BlogCard';
-import { BookingModal } from './components/BookingModal';
 import { useTypewriter } from '@/hooks/useTypewriter';
 import { GET_POSTS } from '@/features/articles/api/queries';
 import {
   CITIES,
   TRUST_BAR_ITEMS,
-  SERVICES,
-  DOCTORS,
-  TESTIMONIALS
+  SERVICES
 } from '@/config/mockData';
-import { ShieldCheck } from 'lucide-react';
+import GOOGLE_REVIEWS from '@/config/reviews_google.json';
+import { ShieldCheck, Calendar, Star } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
+import { stripHtml, formatDate } from '@/utils/format';
+import { SpecialistsSection } from '@/features/specialists/ui/SpecialistsSection';
 
-const stripHtml = (html: string) => {
-  if (!html) return '';
-  let clean = html.replace(/<[^>]*>/g, '');
-  return clean
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#8217;/g, "'")
-    .replace(/&#8216;/g, "'")
-    .replace(/&#8211;/g, "–")
-    .replace(/&#8212;/g, "—")
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
-};
-
-const formatDate = (dateString: string, locale: string) => {
-  if (!dateString) return '';
-  try {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat(locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
-  } catch (e) {
-    return dateString;
-  }
-};
 
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [selectedDoctor, setSelectedDoctor] = React.useState('');
-
   const { data, loading } = useQuery<any>(GET_POSTS, {
+    variables: { language: currentLang.toUpperCase() },
     fetchPolicy: 'cache-first'
   });
 
@@ -64,10 +35,63 @@ const Home: React.FC = () => {
   // Bulletproof typewriter loop decoupled using custom hook
   const displayText = useTypewriter(CITIES);
 
-
-  const openBooking = (name: string) => {
-    setSelectedDoctor(name);
-    setIsModalOpen(true);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "MedicalOrganization",
+        "@id": "https://doctor-in.com/#organization",
+        "name": "Doctor In",
+        "url": "https://doctor-in.com/",
+        "logo": "https://doctor-in.com/images/brands/Isotipo-2.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+51966386803",
+          "contactType": "emergency",
+          "availableLanguage": ["English", "Spanish", "French", "German"]
+        },
+        "sameAs": [
+          "https://www.facebook.com/Doctorin.health/",
+          "https://www.instagram.com/doctorin.health",
+          "https://www.tiktok.com/@doctorin.health"
+         ]
+      },
+      {
+        "@type": "MedicalBusiness",
+        "@id": "https://doctor-in.com/#localbusiness",
+        "name": "DOCTOR CUSCO - Urgent Care Clinic International",
+        "image": "https://doctor-in.com/images/brands/Isotipo-2.svg",
+        "telephone": "+51966386803",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Cusco",
+          "addressLocality": "Cusco",
+          "addressCountry": "PE"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -13.5285498,
+          "longitude": -71.9582218
+        },
+        "url": "https://doctor-in.com/",
+        "priceRange": "$$",
+        "hasMap": "https://www.google.com/maps/place/DOCTOR+CUSCO+-+Urgent+Care+Clinic+International/@-13.5285498,-71.967749,16z/data=!4m10!1m2!2m1!1sDOCTOR+CUSCO!3m6!1s0x273411cc1851cc7d:0xd4ebf1ac8d57b583!8m2!3d-13.5285498!4d-71.9582218!15sCgxET0NUT1IgQ1VTQ09aDiIMZG9jdG9yIGN1c2NvkgEObWVkaWNhbF9jZW50ZXKaASNDaFpEU1VoTk1HOW5TMFZKUTBGblRVTm5NRFZ4TmxCQkVBReABAPoBBAh9ED8!16s%2Fg%2F11tc5tcng_?entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D",
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "00:00",
+          "closes": "23:59"
+        }
+      }
+    ]
   };
 
   return (
@@ -75,6 +99,7 @@ const Home: React.FC = () => {
       <GeoHead
         title="Doctor In | 24/7 Certified Doctors across Latin America"
         description="Certified doctors — at your hotel, home or anywhere in Latin America. Available 24/7 in English, French, German & more."
+        jsonLd={jsonLd}
       />
 
       {/* Hero Section - Full Height Viewport */}
@@ -110,19 +135,25 @@ const Home: React.FC = () => {
             {/* Hero Buttons */}
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto px-10 lg:px-0">
               <Button
-                onClick={() => openBooking('Emergency')}
+                href={t('common.whatsappEmergencyLink')}
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="secondary"
                 size="lg"
-                className="w-full lg:w-auto !rounded-full !px-10 shadow-lg"
+                className="w-full lg:w-auto !rounded-full !px-10 shadow-lg flex gap-2.5 items-center justify-center"
               >
+                <WhatsAppIcon className="text-white" />
                 {t('home.emergencyBtn')}
               </Button>
               <Button
-                onClick={() => openBooking('Appointment')}
+                href="https://app.doctor-in.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="primary"
                 size="lg"
-                className="w-full lg:w-auto !rounded-full !px-10 shadow-xl"
+                className="w-full lg:w-auto !rounded-full !px-10 shadow-xl flex gap-2.5 items-center justify-center"
               >
+                <Calendar size={20} />
                 {t('common.bookNow')}
               </Button>
             </div>
@@ -191,59 +222,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Specialists Section */}
-      <section id="specialists" className="bg-surface-alt py-20 px-6 lg:px-20">
-        <div className="max-w-[1440px] mx-auto">
-
-          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-12 mb-16">
-            <div className="text-center lg:text-left space-y-6 max-w-[700px]">
-              {/* Flag Banner */}
-              <div className="flex justify-center lg:justify-start flex-wrap gap-3 lg:gap-4">
-                {['ar', 'bo', 'br', 'cl', 'co', 'ec', 'py', 'pe', 'uy', 've'].map((code, i) => (
-                  <img
-                    key={i}
-                    src={`https://flagcdn.com/${code}.svg`}
-                    alt={code}
-                    className="w-6 lg:w-8 h-auto rounded shadow-sm"
-                  />
-                ))}
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-[32px] lg:text-[48px] font-heading font-bold text-secondary leading-tight">
-                  {t('home.specTitle')}
-                </h2>
-                <p className="text-lg text-dark-alt/60 font-body">
-                  {t('home.specDesc')}
-                </p>
-              </div>
-            </div>
-
-            <div className="shrink-0">
-              <Button
-                onClick={() => openBooking('a Specialist')}
-                variant="primary"
-                className="!rounded-[30px] !px-12 !py-5 !text-lg !font-bold shadow-xl hover:shadow-primary/20 transition-all hover:-translate-y-1 w-full lg:w-auto"
-              >
-                {t('common.bookNow')}
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {DOCTORS.map((doc, idx) => (
-              <DoctorCard
-                key={idx}
-                name={doc.name}
-                specialty={doc.specialty}
-                info={doc.info}
-                image={doc.image}
-                onBook={() => openBooking(doc.name)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <SpecialistsSection />
 
       {/* Services Section - Beautiful single render with id="services" */}
       <section id="services" className="w-full py-20 lg:py-[100px] px-6 lg:px-20 bg-white">
@@ -269,25 +248,23 @@ const Home: React.FC = () => {
                 </div>
                 <h3 className="text-secondary text-[24px] font-heading font-bold mb-4 group-hover:text-primary transition-colors">{service.title}</h3>
                 <p className="text-dark-alt/70 text-[16px] font-body leading-relaxed mb-8 flex-grow">{service.desc}</p>
-                <button
-                  onClick={() => openBooking(service.title)}
+                <a
+                  href="https://app.doctor-in.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 text-primary font-bold font-body group/btn mt-auto"
                 >
+                  <Calendar size={16} />
                   {t('common.bookNow')}
                   <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
-                </button>
+                </a>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Booking Modal */}
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        doctorName={selectedDoctor}
-      />
+
 
       {/* Testimonials Section */}
       <section className="bg-secondary py-20 px-6 lg:px-20 overflow-hidden relative">
@@ -299,15 +276,39 @@ const Home: React.FC = () => {
             className="!mb-[48px]"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((test, idx) => (
+            {GOOGLE_REVIEWS.slice(0, 6).map((review: any, idx: number) => (
               <TestimonialCard
                 key={idx}
-                text={test.text}
-                author={test.author}
-                location={test.location}
-                rating={test.rating}
+                text={review.text}
+                author={review.name}
+                rating={review.stars}
+                reviewUrl={review.reviewUrl}
               />
             ))}
+          </div>
+
+          {/* Google Reviews CTA buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
+            <Button
+              href="https://www.google.com/maps/place/DOCTOR+CUSCO+-+Urgent+Care+Clinic+International/@-13.5285498,-71.967749,16z/data=!4m10!1m2!2m1!1sDOCTOR+CUSCO!3m6!1s0x273411cc1851cc7d:0xd4ebf1ac8d57b583!8m2!3d-13.5285498!4d-71.9582218!15sCgxET0NUT1IgQ1VTQ09aDiIMZG9jdG9yIGN1c2NvkgEObWVkaWNhbF9jZW50ZXKaASNDaFpEU1VoTk1HOW5TMFZKUTBGblRVTm5NRFZ4TmxCQkVBReABAPoBBAh9ED8!16s%2Fg%2F11tc5tcng_?entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outline"
+              className="w-full sm:w-auto !rounded-full !px-8 text-surface border-surface/30 hover:bg-surface/10 flex gap-2.5 items-center justify-center font-bold"
+            >
+              <Star size={16} className="fill-surface" />
+              {t('home.readReviewsBtn')}
+            </Button>
+            <Button
+              href="https://www.google.com/maps/place/DOCTOR+CUSCO+-+Urgent+Care+Clinic+International/@-13.5285498,-71.967749,16z/data=!4m10!1m2!2m1!1sDOCTOR+CUSCO!3m6!1s0x273411cc1851cc7d:0xd4ebf1ac8d57b583!8m2!3d-13.5285498!4d-71.9582218!15sCgxET0NUT1IgQ1VTQ09aDiIMZG9jdG9yIGN1c2NvkgEObWVkaWNhbF9jZW50ZXKaASNDaFpEU1VoTk1HOW5TMFZKUTBGblRVTm5NRFZ4TmxCQkVBReABAPoBBAh9ED8!16s%2Fg%2F11tc5tcng_?entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="primary"
+              className="w-full sm:w-auto !rounded-full !px-8 flex gap-2.5 items-center justify-center font-bold"
+            >
+              <Star size={16} className="fill-white" />
+              {t('home.writeReviewBtn')}
+            </Button>
           </div>
         </div>
       </section>
@@ -381,10 +382,17 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-            <Button variant="light" size="lg" className="w-full lg:w-auto !text-primary font-bold shadow-2xl">
-              {t('home.callEmergency')}
+            <Button 
+              href={t('common.whatsappEmergencyLink')}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="light" 
+              size="lg" 
+              className="w-full lg:w-auto !text-primary font-bold shadow-2xl flex gap-2.5 items-center justify-center"
+            >
+              <WhatsAppIcon className="text-primary" width={20} height={20} />
+              {t('home.whatsappEmergency')}
             </Button>
-            <span className="text-white/60 font-body text-sm font-medium">{t('home.orWhatsapp')}</span>
           </div>
         </div>
       </section>

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/Button';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Calendar } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
@@ -47,24 +47,41 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-10">
+        <nav className="hidden lg:flex items-center gap-8">
           {[
             { key: 'about', href: '/about' },
             { key: 'services', href: '/#services' },
             { key: 'specialists', href: '/#specialists' },
             { key: 'blog', href: '/blog' },
             { key: 'contact', href: '/contact' },
-          ].map((link) => (
-            <Link 
-              key={link.key} 
-              to={link.href}
-              className={`font-body text-[15px] font-semibold transition-all hover:text-accent ${
-                isScrolled || isDarkHeroPage ? 'text-white/70' : 'text-secondary/70'
-              }`}
-            >
-              {t(`nav.${link.key}`)}
-            </Link>
-          ))}
+            { key: 'joinUsMenu', href: 'https://management.doctor-in.com/?from=candidates', isExternal: true },
+          ].map((link) => {
+            const className = `font-body text-[15px] font-semibold transition-all hover:text-accent ${
+              isScrolled || isDarkHeroPage ? 'text-white/70' : 'text-secondary/70'
+            }`;
+            if (link.isExternal) {
+              return (
+                <a 
+                  key={link.key} 
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {t(`nav.${link.key}`)}
+                </a>
+              );
+            }
+            return (
+              <Link 
+                key={link.key} 
+                to={link.href}
+                className={className}
+              >
+                {t(`nav.${link.key}`)}
+              </Link>
+            );
+          })}
         </nav>
 
 
@@ -73,7 +90,14 @@ export const Header: React.FC = () => {
           <div className={isScrolled || isDarkHeroPage ? 'text-surface' : 'text-secondary'}>
             <LanguageSwitcher />
           </div>
-          <Button variant="primary" className="!px-7 !py-3 !text-sm flex gap-2 items-center shadow-lg">
+          <Button 
+            href="https://app.doctor-in.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="primary" 
+            className="!px-7 !py-3 !text-sm flex gap-2.5 items-center shadow-lg"
+          >
+            <Calendar size={16} />
             {t('common.bookNow')}
           </Button>
         </div>
@@ -101,25 +125,51 @@ export const Header: React.FC = () => {
         }`}
         aria-hidden={!isMobileMenuOpen}
       >
-        <div className="flex flex-col gap-8 p-10 items-center">
+        <div className="flex flex-col gap-6 p-8 items-center">
           {[
             { key: 'about', href: '/about' },
             { key: 'services', href: '/#services' },
             { key: 'specialists', href: '/#specialists' },
             { key: 'blog', href: '/blog' },
             { key: 'contact', href: '/contact' },
-          ].map((link) => (
-            <Link 
-              key={link.key} 
-              to={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-surface text-3xl font-heading font-bold hover:text-accent transition-colors"
-            >
-              {t(`nav.${link.key}`)}
-            </Link>
-          ))}
+            { key: 'joinUsMenu', href: 'https://management.doctor-in.com/?from=candidates', isExternal: true },
+          ].map((link) => {
+            const className = "text-surface text-2xl font-heading font-bold hover:text-accent transition-colors";
+            if (link.isExternal) {
+              return (
+                <a 
+                  key={link.key} 
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={className}
+                >
+                  {t(`nav.${link.key}`)}
+                </a>
+              );
+            }
+            return (
+              <Link 
+                key={link.key} 
+                to={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={className}
+              >
+                {t(`nav.${link.key}`)}
+              </Link>
+            );
+          })}
 
-          <Button variant="primary" size="lg" className="w-full flex gap-3 items-center mt-4">
+          <Button 
+            href="https://app.doctor-in.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="primary" 
+            size="lg" 
+            className="w-full flex gap-3 items-center justify-center mt-4"
+          >
+            <Calendar size={20} />
             {t('common.bookNow')}
           </Button>
         </div>

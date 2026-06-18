@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_POSTS = gql`
-  query GetPosts {
-    posts {
+  query GetPosts($language: LanguageCodeFilterEnum) {
+    posts(where: { language: $language }) {
       nodes {
         id
         title

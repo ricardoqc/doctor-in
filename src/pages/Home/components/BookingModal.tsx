@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Send, ShieldCheck, MapPin, Phone, Mail, User, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Link } from 'react-router-dom';
+import { sendBookingEmail } from '@/services/emailService';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -17,12 +18,42 @@ const SA_COUNTRIES = [
 
 export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doctorName }) => {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSuccess(true);
+    setIsSending(true);
+    setErrorMessage(null);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+    const location = formData.get('location') as string;
+    const description = formData.get('description') as string;
+
+    try {
+      const success = await sendBookingEmail({
+        doctorName,
+        name,
+        email,
+        phone,
+        location,
+        description
+      });
+      if (success) {
+        setIsSuccess(true);
+      } else {
+        setErrorMessage('Failed to send booking request. Please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('Error sending request. Please contact us via WhatsApp.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleClose = () => {
@@ -79,6 +110,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="p-8 space-y-5 overflow-y-auto max-h-[75vh]">
+              {errorMessage && (
+                <div className="p-4 bg-red-50 text-red-700 text-sm font-semibold rounded-2xl border border-red-150">
+                  {errorMessage}
+                </div>
+              )}
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
@@ -88,6 +124,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
                       <input 
                         required 
                         id="booking-name"
+                        name="name"
                         type="text" 
                         placeholder="e.g. John Doe" 
                         className="w-full bg-surface-alt border-none rounded-2xl pl-12 pr-6 py-4 focus:ring-2 focus:ring-primary transition-all font-body text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" 
@@ -101,6 +138,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
                       <input 
                         required 
                         id="booking-email"
+                        name="email"
                         type="email" 
                         placeholder="john@example.com" 
                         className="w-full bg-surface-alt border-none rounded-2xl pl-12 pr-6 py-4 focus:ring-2 focus:ring-primary transition-all font-body text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" 
@@ -117,6 +155,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
                       <input 
                         required 
                         id="booking-phone"
+                        name="phone"
                         type="tel" 
                         placeholder="+51 XXX XXX XXX" 
                         className="w-full bg-surface-alt border-none rounded-2xl pl-12 pr-6 py-4 focus:ring-2 focus:ring-primary transition-all font-body text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" 
@@ -130,6 +169,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
                       <select 
                         required 
                         id="booking-location"
+                        name="location"
                         className="w-full bg-surface-alt border-none rounded-2xl pl-12 pr-6 py-4 focus:ring-2 focus:ring-primary transition-all font-body text-secondary appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                       >
                         <option value="">Select country...</option>
@@ -144,6 +184,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
                   <textarea 
                     required 
                     id="booking-description"
+                    name="description"
                     rows={3} 
                     placeholder="How can our specialist help you today?" 
                     className="w-full bg-surface-alt border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all font-body text-secondary resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent" 
@@ -163,10 +204,15 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, doc
               <Button 
                 type="submit" 
                 variant="primary" 
-                className="w-full !rounded-2xl !py-5 flex gap-3 items-center justify-center font-bold shadow-xl shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                disabled={isSending}
+                className="w-full !rounded-2xl !py-5 flex gap-3 items-center justify-center font-bold shadow-xl shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-50"
               >
-                <Send size={18} />
-                Confirm Booking Request
+                {isSending ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <Send size={18} />
+                )}
+                {isSending ? 'Sending Request...' : 'Confirm Booking Request'}
               </Button>
             </form>
           </>

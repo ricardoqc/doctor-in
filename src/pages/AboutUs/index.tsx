@@ -1,19 +1,55 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Award, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GeoHead } from '@/seo/GeoHead';
-import { ABOUT_TEAM as team, ABOUT_VALUES as values } from '@/config/mockData';
+import { ABOUT_VALUES as values } from '@/config/mockData';
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
+import { SpecialistsSection } from '@/features/specialists/ui/SpecialistsSection';
+
 
 export const AboutUs: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": "https://doctor-in.com/about-us/#webpage",
+        "url": "https://doctor-in.com/about-us",
+        "name": "About Us | Doctor In",
+        "description": "Learn about our mission to provide immediate, premium medical assistance to international travelers across Latin America."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://doctor-in.com/about-us/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://doctor-in.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About Us",
+            "item": "https://doctor-in.com/about-us"
+          }
+        ]
+      }
+    ]
+  };
 
   return (
     <div className="w-full">
       <GeoHead 
         title="About Doctor In | Premium Healthcare for Travelers in Latam"
         description="Learn about our mission to provide immediate, premium medical assistance to international travelers across Latin America."
+        jsonLd={jsonLd}
       />
 
       {/* About Hero */}
@@ -100,33 +136,23 @@ export const AboutUs: React.FC = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="w-full py-20 lg:py-[100px] px-6 lg:px-20 bg-white">
-        <div className="max-w-[1440px] mx-auto text-center">
-          <SectionHeader 
-            title={t('about.teamTitle')}
-            description={t('about.teamDesc')}
-            className="!mb-[64px]"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {team.map((doc, idx) => (
-              <div key={idx} className="bg-white rounded-[16px] overflow-hidden shadow-premium border border-surface-alt group hover:-translate-y-2 transition-all duration-300">
-                <div className="h-[240px] overflow-hidden relative">
-                  <img src={doc.image} alt={doc.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <Button variant="light" size="sm" className="w-full !text-secondary font-bold">{t('about.viewProfile')}</Button>
-                  </div>
-                </div>
-                <div className="p-6 text-left space-y-2">
-                  <h4 className="text-secondary text-[20px] font-heading font-bold">{doc.name}</h4>
-                  <p className="text-accent text-[14px] font-bold font-body">{doc.specialty}</p>
-                  <p className="text-dark-alt/60 text-[14px] font-body">{doc.experience}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <SpecialistsSection />
+
+      {/* Legal Pages Links */}
+      <div className="w-full bg-white pb-16 px-6 text-center">
+        <div className="max-w-[600px] mx-auto border-t border-surface-alt pt-8">
+          <p className="text-xs text-dark-alt/50 font-body">
+            {i18n.language.startsWith('es') 
+              ? 'Para obtener más información sobre nuestras prácticas legales, consulte nuestros '
+              : 'For more information on our legal practices, please view our '}
+            <Link to="/terms" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">{i18n.language.startsWith('es') ? 'Términos de Uso' : 'Terms of Use'}</Link>
+            {', '}
+            <Link to="/privacy" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">{i18n.language.startsWith('es') ? 'Política de Privacidad' : 'Privacy Policy'}</Link>
+            {i18n.language.startsWith('es') ? ' y ' : ' and '}
+            <Link to="/cookie-policy" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">{i18n.language.startsWith('es') ? 'Política de Cookies' : 'Cookie Policy'}</Link>.
+          </p>
         </div>
-      </section>
+      </div>
 
       {/* Emergency Band */}
       <section className="w-full bg-primary py-10 lg:py-[60px] px-6 lg:px-20 relative overflow-hidden">
@@ -138,8 +164,16 @@ export const AboutUs: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col items-center gap-4 w-full lg:w-auto">
-            <Button variant="light" size="lg" className="w-full lg:w-auto !text-primary font-bold shadow-2xl">
-              {t('about.callSupport')}
+            <Button 
+              href={t('common.whatsappEmergencyLink')}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="light" 
+              size="lg" 
+              className="w-full lg:w-auto !text-primary font-bold shadow-2xl flex gap-2.5 items-center justify-center"
+            >
+              <WhatsAppIcon className="text-primary" />
+              {t('about.whatsappSupport')}
             </Button>
             <span className="text-white/60 font-body text-sm font-medium">{t('about.availableIn')}</span>
           </div>

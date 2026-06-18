@@ -4,34 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { GeoHead } from '@/seo/GeoHead';
 import { BlogCard } from '@/features/articles/ui/BlogCard';
 import { GET_POSTS } from '@/features/articles/api/queries';
+import { stripHtml, formatDate } from '@/utils/format';
 
-const stripHtml = (html: string) => {
-  if (!html) return '';
-  let clean = html.replace(/<[^>]*>/g, '');
-  return clean
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#8217;/g, "'")
-    .replace(/&#8216;/g, "'")
-    .replace(/&#8211;/g, "–")
-    .replace(/&#8212;/g, "—")
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
-};
-
-const formatDate = (dateString: string, locale: string) => {
-  if (!dateString) return '';
-  try {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat(locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
-  } catch (e) {
-    return dateString;
-  }
-};
 
 const BlogSkeleton: React.FC = () => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -57,16 +31,49 @@ export const BlogList: React.FC = () => {
   const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
 
   const { data, loading, error } = useQuery<any>(GET_POSTS, {
+    variables: { language: currentLang.toUpperCase() },
     fetchPolicy: 'cache-first'
   });
 
   const posts = data?.posts?.nodes || [];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": "https://doctor-in.com/blog/#webpage",
+        "url": "https://doctor-in.com/blog",
+        "name": "Health & Travel Insights Blog | Doctor In",
+        "description": "Health tips and guides for travelers and expats in Latin America."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://doctor-in.com/blog/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://doctor-in.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": "https://doctor-in.com/blog"
+          }
+        ]
+      }
+    ]
+  };
 
   return (
     <div className="w-full bg-surface-alt">
       <GeoHead 
         title="Blog | Doctor In"
         description="Health tips and guides for travelers and expats in Latin America."
+        jsonLd={jsonLd}
       />
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-20 pt-[120px] pb-20">

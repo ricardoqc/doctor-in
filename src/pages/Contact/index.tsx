@@ -1,16 +1,81 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Phone, Mail, MessageCircle, Send, Clock, CheckCircle } from 'lucide-react';
+import { Mail, Send, Clock, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { GeoHead } from '@/seo/GeoHead';
+import { sendContactEmail } from '@/services/emailService';
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
+
 
 export const ContactPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSuccess(true);
+    setIsSending(true);
+    setErrorMessage(null);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const subject = formData.get('subject') as string;
+    const message = formData.get('message') as string;
+
+    try {
+      const success = await sendContactEmail({ name, email, subject, message });
+      if (success) {
+        setIsSuccess(true);
+      } else {
+        setErrorMessage(
+          i18n.language.startsWith('es')
+            ? 'Hubo un error al enviar tu mensaje. Por favor, intenta de nuevo.'
+            : 'There was an error sending your message. Please try again.'
+        );
+      }
+    } catch (error) {
+      setErrorMessage(
+        i18n.language.startsWith('es')
+          ? 'Error de conexión. Intente por WhatsApp o por correo directamente.'
+          : 'Connection error. Please try via WhatsApp or direct email.'
+      );
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ContactPage",
+        "@id": "https://doctor-in.com/contact/#webpage",
+        "url": "https://doctor-in.com/contact",
+        "name": "Contact Us | Doctor In",
+        "description": "We are available 24/7 for medical emergencies and standard consultations across Latin America. Contact our English-speaking team today."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://doctor-in.com/contact/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://doctor-in.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Contact Us",
+            "item": "https://doctor-in.com/contact"
+          }
+        ]
+      }
+    ]
   };
 
   return (
@@ -18,6 +83,7 @@ export const ContactPage: React.FC = () => {
       <GeoHead 
         title="Contact Us | 24/7 Medical Assistance in Latin America"
         description="We are available 24/7 for medical emergencies and standard consultations across Latin America. Contact our English-speaking team today."
+        jsonLd={jsonLd}
       />
 
       {/* Contact Hero */}
@@ -49,28 +115,55 @@ export const ContactPage: React.FC = () => {
 
             <div className="space-y-6">
               {[
-                { icon: Phone, title: t('contact.callTitle'), detail: '+51 987 654 321', color: 'text-primary', bgColor: 'bg-primary/10' },
-                { icon: Mail, title: t('contact.emailTitle'), detail: 'care@doctorin.pe', color: 'text-accent', bgColor: 'bg-accent/10' },
-                { icon: Clock, title: t('contact.availTitle'), detail: t('contact.availDesc'), color: 'text-secondary', bgColor: 'bg-secondary/10' }
-              ].map((info, idx) => (
-                <div key={idx} className="flex items-center gap-6 p-6 bg-white rounded-[24px] shadow-premium border border-white hover:border-accent/30 transition-all duration-300 group">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${info.bgColor} ${info.color} group-hover:scale-110 transition-transform`}>
-                    <info.icon size={24} />
+                { icon: WhatsAppIcon, title: t('contact.waTitle'), detail: '+51 966 386 803', href: t('common.whatsappGeneralLink'), color: 'text-primary', bgColor: 'bg-primary/10' },
+                { icon: Mail, title: t('contact.emailTitle'), detail: 'doctorin.health@gmail.com', href: 'mailto:doctorin.health@gmail.com', color: 'text-accent', bgColor: 'bg-accent/10' },
+                { icon: Clock, title: t('contact.availTitle'), detail: t('contact.availDesc'), href: undefined, color: 'text-secondary', bgColor: 'bg-secondary/10' }
+              ].map((info, idx) => {
+                const content = (
+                  <>
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${info.bgColor} ${info.color} group-hover:scale-110 transition-transform`}>
+                      <info.icon size={24} />
+                    </div>
+                    <div>
+                      <p className="text-dark-alt/40 text-[12px] font-bold uppercase tracking-widest mb-1 font-body">{info.title}</p>
+                      <p className="text-secondary font-heading font-bold text-lg">{info.detail}</p>
+                    </div>
+                  </>
+                );
+                const wrapperClass = "flex items-center gap-6 p-6 bg-white rounded-[24px] shadow-premium border border-white hover:border-accent/30 transition-all duration-300 group w-full text-left";
+                if (info.href) {
+                  const isExternal = info.href.startsWith('http');
+                  return (
+                    <a 
+                      key={idx} 
+                      href={info.href} 
+                      className={wrapperClass}
+                      {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {content}
+                    </a>
+                  );
+                }
+                return (
+                  <div key={idx} className={wrapperClass}>
+                    {content}
                   </div>
-                  <div>
-                    <p className="text-dark-alt/40 text-[12px] font-bold uppercase tracking-widest mb-1 font-body">{info.title}</p>
-                    <p className="text-secondary font-heading font-bold text-lg">{info.detail}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="p-8 bg-secondary rounded-[32px] text-surface shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />
                <h4 className="text-xl font-heading font-bold mb-3 relative z-10">{t('contact.waTitle')}</h4>
                <p className="text-white/60 font-body text-sm mb-6 relative z-10">{t('contact.waDesc')}</p>
-               <Button variant="accent" className="w-full flex gap-2 items-center justify-center text-surface font-bold relative z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent">
-                 <MessageCircle size={20} />
+               <Button 
+                 href={t('common.whatsappGeneralLink')}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 variant="accent" 
+                 className="w-full flex gap-2.5 items-center justify-center text-surface font-bold relative z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
+               >
+                 <WhatsAppIcon className="text-white" />
                  {t('contact.waBtn')}
                </Button>
             </div>
@@ -101,12 +194,18 @@ export const ContactPage: React.FC = () => {
               <>
                 <h3 className="text-secondary text-[28px] font-heading font-bold mb-8">{t('contact.formTitle')}</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {errorMessage && (
+                    <div className="p-4 bg-red-50 text-red-700 text-sm font-semibold rounded-2xl border border-red-150">
+                      {errorMessage}
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label htmlFor="contact-name" className="text-secondary text-sm font-bold font-heading ml-1 block">{t('contact.nameLabel')}</label>
                       <input 
                         required
                         id="contact-name"
+                        name="name"
                         type="text" 
                         placeholder={t('contact.namePlaceholder')}
                         className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
@@ -117,6 +216,7 @@ export const ContactPage: React.FC = () => {
                       <input 
                         required
                         id="contact-email"
+                        name="email"
                         type="email" 
                         placeholder={t('contact.emailPlaceholder')}
                         className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
@@ -128,6 +228,7 @@ export const ContactPage: React.FC = () => {
                     <input 
                       required
                       id="contact-subject"
+                      name="subject"
                       type="text" 
                       placeholder={t('contact.subjectPlaceholder')}
                       className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
@@ -138,15 +239,43 @@ export const ContactPage: React.FC = () => {
                     <textarea 
                       required
                       id="contact-message"
+                      name="message"
                       rows={5}
                       placeholder={t('contact.messagePlaceholder')}
                       className="w-full bg-surface-alt border border-surface-alt rounded-2xl px-6 py-4 focus:outline-none focus:border-accent transition-colors font-body text-secondary resize-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                     />
                   </div>
-                  <Button type="submit" variant="primary" size="lg" className="w-full flex gap-3 items-center justify-center font-bold shadow-urgent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent">
-                    <Send size={20} />
-                    {t('contact.submitBtn')}
+                  <Button 
+                    type="submit" 
+                    variant="primary" 
+                    size="lg" 
+                    disabled={isSending}
+                    className="w-full flex gap-3 items-center justify-center font-bold shadow-urgent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent disabled:opacity-50"
+                  >
+                    {isSending ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Send size={20} />
+                    )}
+                    {isSending ? (i18n.language.startsWith('es') ? 'Enviando...' : 'Sending...') : t('contact.submitBtn')}
                   </Button>
+                  <p className="text-[11px] text-center text-dark-alt/50 font-body mt-4">
+                    {i18n.language.startsWith('es') ? (
+                      <>
+                        Al enviar este formulario, aceptas nuestros{' '}
+                        <Link to="/terms" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">Términos de Uso</Link>
+                        {' '}y nuestra{' '}
+                        <Link to="/privacy" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">Política de Privacidad</Link>.
+                      </>
+                    ) : (
+                      <>
+                        By submitting this form, you agree to our{' '}
+                        <Link to="/terms" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">Terms of Use</Link>
+                        {' '}and{' '}
+                        <Link to="/privacy" className="text-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent">Privacy Policy</Link>.
+                      </>
+                    )}
+                  </p>
                 </form>
               </>
             )}
