@@ -104,7 +104,7 @@ export const Header: React.FC = () => {
               <LanguageSwitcher />
             </div>
             <Button 
-              href="https://app.doctor-in.com/"
+              href={t('common.whatsappGeneralLink')}
               target="_blank"
               rel="noopener noreferrer"
               variant="primary" 
@@ -178,7 +178,7 @@ export const Header: React.FC = () => {
           })}
 
           <Button 
-            href="https://app.doctor-in.com/"
+            href={t('common.whatsappGeneralLink')}
             target="_blank"
             rel="noopener noreferrer"
             variant="primary" 

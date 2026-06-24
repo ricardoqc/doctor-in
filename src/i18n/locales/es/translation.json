@@ -10,10 +10,10 @@
     "joinUsMenu": "Únete"
   },
   "common": {
-    "bookNow": "Reservar",
+    "bookNow": "Consulta Online",
     "readMore": "Leer Más",
     "joinUs": "Únete",
-    "whatsappGeneralLink": "https://wa.me/51966386803?text=Hola%20Doctor%20In%2C%20necesito%20coordinar%20una%20consulta%20m%C3%A9dica.%20%C2%BFMe%20podr%C3%ADan%20ayudar%3F",
+    "whatsappGeneralLink": "https://wa.me/51966386803?text=Hola%20Doctor%20In%2C%20me%20gustar%C3%ADa%20solicitar%20una%20consulta%20m%C3%A9dica%20online.%20%C2%BFMe%20podr%C3%ADan%20ayudar%20a%20coordinarla%3F",
     "whatsappEmergencyLink": "https://wa.me/51966386803?text=%C2%A1Emergencia%21%20Necesito%20un%20doctor%20inmediatamente%20en%20mi%20ubicaci%C3%B3n."
   },
   "footer": {
@@ -37,18 +37,18 @@
     "badge": "Atención Médica para Viajeros Internacionales",
     "title1": "Necesito un",
     "title2": "Doctor En",
-    "desc": "Doctores certificados — en tu hotel, casa o en cualquier lugar de América Latina. Disponible 24/7 en inglés, francés, alemán y más.",
+    "desc": "Consultas virtuales y asistencia médica con doctores certificados 24/7 en toda América Latina. Hablamos tu idioma: inglés, francés, alemán y más.",
     "emergencyBtn": "Emergencia 24/7",
     "stepsTitle": "Ayuda Médica en 3 Pasos",
     "stepsDesc": "No tienes que navegar un sistema de salud extranjero solo. Nosotros nos encargamos.",
     "step1Title": "Contáctanos",
     "step1Desc": "Llamános, WhatsApp o reserva en línea. Respondemos en minutos en tu idioma.",
-    "step2Title": "El Doctor te Visita",
-    "step2Desc": "Un especialista certificado va a tu hotel, casa o clínica cercana.",
+    "step2Title": "Conéctate con un Doctor",
+    "step2Desc": "Realiza tu consulta virtual con un médico o especialista certificado por videollamada en minutos.",
     "step3Title": "Tratamiento y Seguimiento",
     "step3Desc": "Recibe recetas, referidos de laboratorio y cuidado digital.",
     "specTitle": "Los mejores especialistas listos para atender tu emergencia",
-    "specDesc": "Nuestra red premium de médicos certificados y multilingües está disponible las 24 horas, los 7 días de la semana. Reciba atención médica general o de emergencia directamente en su hotel, hogar u oficina, sin barreras de idioma.",
+    "specDesc": "Nuestra red premium de médicos certificados y multilingües está lista para ayudarte online. Consulta con médicos generales y especialistas por videollamada en inglés, español, francés, alemán o portugués sin salir de tu hospedaje.",
     "specialistCard1Title": "Red Médica Certificada",
     "specialistCard1Desc": "Acceda a médicos generales y especialistas certificados, con licencias vigentes y verificación rigurosa.",
     "specialistCard2Title": "Médicos Multilingües",
@@ -76,20 +76,20 @@
       "emergencySub": "Siempre disponible",
       "multilingual": "Atención Multilingüe",
       "multilingualSub": "Inglés, Español y más",
-      "location": "En tu Ubicación",
-      "locationSub": "Hotel, Airbnb o casa",
+      "location": "Telemedicina en Ruta",
+      "locationSub": "Disponible en tu celular",
       "certified": "Especialistas Certificados",
       "certifiedSub": "Licenciados y asegurados"
     },
     "services": {
-      "emergencyCare": "Atención de Emergencia",
-      "emergencyCareDesc": "Respuesta médica inmediata en toda América Latina. Doctor enviado a tu ubicación en 30 min.",
-      "appointment": "Reserva una Cita",
-      "appointmentDesc": "Agenda una visita con un especialista en inglés, francés o alemán. Disponible el mismo día.",
-      "specialist": "Consultas Especializadas",
-      "specialistDesc": "Cardiología, dermatología, pediatría y más. Cuidado de estándar internacional en tu idioma.",
-      "labs": "Recetas y Laboratorios",
-      "labsDesc": "Recibe tu receta digitalmente. Coordinado con laboratorios y farmacias cercanas."
+      "emergencyCare": "Telemedicina 24/7",
+      "emergencyCareDesc": "Respuesta médica inmediata por WhatsApp. Habla con un doctor certificado online en minutos.",
+      "appointment": "Consultas Virtuales",
+      "appointmentDesc": "Agenda una video-consulta para el mismo día con médicos generales y especialistas en tu idioma.",
+      "specialist": "Segunda Opinión Especializada",
+      "specialistDesc": "Obtén consultas digitales con pediatras, dermatólogos, cardiólogos y más especialidades.",
+      "labs": "Recetas Digitales",
+      "labsDesc": "Recibe recetas médicas oficiales y órdenes de laboratorio en formato digital, listas para farmacias locales."
     }
   },
   "about": {

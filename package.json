@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node scripts/fetch-posts.js && tsc && vite build",
     "preview": "vite preview",
     "start": "vite preview --host 0.0.0.0"
   },

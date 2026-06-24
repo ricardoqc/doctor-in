@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { ArrowRight, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface BlogCardProps {
   title: string;
@@ -20,6 +21,8 @@ export const BlogCard: React.FC<BlogCardProps> = ({
   image, 
   slug 
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col h-full bg-surface-alt rounded-3xl overflow-hidden group border border-surface-alt hover:border-accent/30 transition-all focus-within:ring-2 focus-within:ring-accent">
       <div className="relative h-56 overflow-hidden">
@@ -41,7 +44,9 @@ export const BlogCard: React.FC<BlogCardProps> = ({
             {date}
           </div>
           <h3 className="text-xl font-heading font-bold text-secondary group-hover:text-primary transition-colors leading-tight">
-            {title}
+            <Link to={`/blog/${slug}`} className="hover:underline focus:outline-none">
+              {title}
+            </Link>
           </h3>
           <p className="text-dark-alt/60 font-body text-sm leading-relaxed line-clamp-3">
             {excerpt}
@@ -52,7 +57,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({
           to={`/blog/${slug}`} 
           className="flex items-center gap-2 text-primary hover:text-secondary font-bold font-body text-sm mt-6 group/btn cursor-pointer focus:outline-none focus-visible:underline"
         >
-          Read More 
+          {t('common.readMore')} 
           <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
         </Link>
       </div>

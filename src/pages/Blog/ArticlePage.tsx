@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Clock, ChevronRight, MessageCircle, Share2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { GeoHead } from '@/seo/GeoHead';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { stripHtml, formatDate, calculateReadTime } from '@/utils/format';
-import { GET_POST_BY_SLUG, GET_POSTS } from '@/features/articles/api/queries';
+import staticPosts from '@/config/posts.json';
 
 
 export const ArticlePage: React.FC = () => {
@@ -16,19 +15,14 @@ export const ArticlePage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
 
-  const { data, loading, error } = useQuery<any>(GET_POST_BY_SLUG, {
-    variables: { slug },
-    skip: !slug,
-    fetchPolicy: 'network-only'
-  });
+  const post = staticPosts.es.find((p: any) => p.slug === slug) || staticPosts.en.find((p: any) => p.slug === slug);
+  const postLang = post?.uri?.startsWith('/en/') ? 'en' : 'es';
+  const recentPosts = (postLang === 'en' ? staticPosts.en : staticPosts.es)
+    .filter((p: any) => p.slug !== slug)
+    .slice(0, 3);
 
-  const { data: recentData } = useQuery<any>(GET_POSTS, {
-    variables: { language: currentLang.toUpperCase() },
-    fetchPolicy: 'cache-first'
-  });
-
-  const post = data?.post;
-  const recentPosts = recentData?.posts?.nodes || [];
+  const loading = false;
+  const error = null;
 
   const [activePost, setActivePost] = useState<any>(null);
 
@@ -108,11 +102,9 @@ export const ArticlePage: React.FC = () => {
             {currentLang.startsWith('es') ? 'Artículo no encontrado' : 'Article not found'}
           </h1>
           <p className="text-dark-alt/60 font-body">
-            {error 
-              ? error.message 
-              : (currentLang.startsWith('es') 
-                  ? 'Lo sentimos, la entrada de blog que buscas no existe o fue movida.' 
-                  : 'Sorry, the blog post you are looking for does not exist or has been moved.')}
+            {currentLang.startsWith('es') 
+              ? 'Lo sentimos, la entrada de blog que buscas no existe o fue movida.' 
+              : 'Sorry, the blog post you are looking for does not exist or has been moved.'}
           </p>
           <Link to="/blog">
             <Button variant="primary" className="mt-4 flex gap-2 items-center mx-auto">

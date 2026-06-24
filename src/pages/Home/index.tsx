@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client/react';
 import { Link } from 'react-router-dom';
 import { GeoHead } from '@/seo/GeoHead';
 import { Button } from '@/components/ui/Button';
@@ -8,13 +7,13 @@ import { SectionHeader } from '@/components/ui/SectionHeader';
 import { TestimonialCard } from './components/TestimonialCard';
 import { BlogCard } from '@/features/articles/ui/BlogCard';
 import { useTypewriter } from '@/hooks/useTypewriter';
-import { GET_POSTS } from '@/features/articles/api/queries';
 import {
   CITIES,
   TRUST_BAR_ITEMS,
   SERVICES
 } from '@/config/mockData';
 import GOOGLE_REVIEWS from '@/config/reviews_google.json';
+import staticPosts from '@/config/posts.json';
 import { ShieldCheck, Calendar, Star } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { stripHtml, formatDate } from '@/utils/format';
@@ -25,12 +24,9 @@ import { SpecialistsSection } from '@/features/specialists/ui/SpecialistsSection
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const currentLang = (i18n.language || 'en').startsWith('en') ? 'en' : 'es';
-  const { data, loading } = useQuery<any>(GET_POSTS, {
-    variables: { language: currentLang.toUpperCase() },
-    fetchPolicy: 'cache-first'
-  });
 
-  const posts = data?.posts?.nodes?.slice(0, 3) || [];
+  // Load posts instantly from pre-rendered build file
+  const posts = (currentLang === 'en' ? staticPosts.en : staticPosts.es).slice(0, 3);
 
   // Bulletproof typewriter loop decoupled using custom hook
   const displayText = useTypewriter(CITIES);
@@ -146,7 +142,7 @@ const Home: React.FC = () => {
                 {t('home.emergencyBtn')}
               </Button>
               <Button
-                href="https://app.doctor-in.com/"
+                href={t('common.whatsappGeneralLink')}
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="primary"
@@ -249,7 +245,7 @@ const Home: React.FC = () => {
                 <h3 className="text-secondary text-[24px] font-heading font-bold mb-4 group-hover:text-primary transition-colors">{service.title}</h3>
                 <p className="text-dark-alt/70 text-[16px] font-body leading-relaxed mb-8 flex-grow">{service.desc}</p>
                 <a
-                  href="https://app.doctor-in.com/"
+                  href={t('common.whatsappGeneralLink')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-primary font-bold font-body group/btn mt-auto"
@@ -325,23 +321,7 @@ const Home: React.FC = () => {
           </Link>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="flex flex-col h-full bg-surface-alt rounded-3xl overflow-hidden border border-surface-alt/50">
-                <div className="h-56 bg-dark-alt/5" />
-                <div className="p-8 flex-grow space-y-4">
-                  <div className="h-4 bg-dark-alt/5 rounded w-1/4" />
-                  <div className="h-8 bg-dark-alt/10 rounded w-3/4" />
-                  <div className="space-y-2">
-                    <div className="h-4 bg-dark-alt/5 rounded w-full" />
-                    <div className="h-4 bg-dark-alt/5 rounded w-5/6" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : posts.length === 0 ? (
+        {posts.length === 0 ? (
           <div className="text-center py-12 bg-surface-alt rounded-[32px] border border-surface-alt">
             <p className="text-dark-alt/60 font-body">
               {currentLang.startsWith('es') ? 'Pronto habrá nuevos artículos en español.' : 'Check back soon for new articles.'}

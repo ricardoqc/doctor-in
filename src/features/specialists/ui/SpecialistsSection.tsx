@@ -44,7 +44,7 @@ export const SpecialistsSection: React.FC<SpecialistsSectionProps> = ({
 
           <div className="shrink-0">
             <Button
-              href="https://app.doctor-in.com/"
+              href={t('common.whatsappGeneralLink')}
               target="_blank"
               rel="noopener noreferrer"
               variant="primary"

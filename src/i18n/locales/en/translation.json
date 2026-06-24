@@ -10,10 +10,10 @@
     "joinUsMenu": "Join Us"
   },
   "common": {
-    "bookNow": "Book Now",
+    "bookNow": "Online Consultation",
     "readMore": "Read More",
     "joinUs": "Join Us",
-    "whatsappGeneralLink": "https://wa.me/51966386803?text=Hello%20Doctor%20In%2C%20I%20need%20to%20coordinate%20a%20medical%20consultation.%20Can%20you%20assist%20me%3F",
+    "whatsappGeneralLink": "https://wa.me/51966386803?text=Hello%20Doctor%20In%2C%20I%20would%20like%20to%20request%20an%20online%20medical%20consultation.%20Can%20you%20help%20me%3F",
     "whatsappEmergencyLink": "https://wa.me/51966386803?text=Emergency%21%20I%20need%20a%20doctor%20immediately%20at%20my%20location."
   },
   "footer": {
@@ -37,18 +37,18 @@
     "badge": "Medical Care for International Travelers",
     "title1": "I need",
     "title2": "Doctor In",
-    "desc": "Certified doctors — at your hotel, home or anywhere in Latin America. Available 24/7 in English, French, German & more.",
+    "desc": "Virtual consultations with certified doctors available 24/7 across Latin America. Fluent in English, French, German & more.",
     "emergencyBtn": "Emergency 24/7",
     "stepsTitle": "Get Medical Help in 3 Easy Steps",
     "stepsDesc": "No need to navigate a foreign healthcare system alone. We handle everything.",
     "step1Title": "Contact Us",
     "step1Desc": "Call, WhatsApp or book online. We respond in minutes in your language.",
-    "step2Title": "Doctor Visits You",
-    "step2Desc": "A certified specialist comes to your hotel, home or clinic near you.",
+    "step2Title": "Connect with a Doctor",
+    "step2Desc": "Consult with a certified general practitioner or specialist online via video call in minutes.",
     "step3Title": "Get Treatment & Follow-up",
     "step3Desc": "Receive prescription, lab referrals and follow-up care digitally.",
     "specTitle": "The Best Specialists Ready to Assist in Your Emergency",
-    "specDesc": "Our premium network of certified, multilingual doctors is on call 24/7. Get immediate standard or emergency medical care right at your hotel, home, or office, without language barriers.",
+    "specDesc": "Our premium network of certified, multilingual doctors is ready to help you online. Consult with general practitioners and specialists via video call in your language, anywhere in Latin America.",
     "specialistCard1Title": "Certified Medical Network",
     "specialistCard1Desc": "Access board-certified general practitioners and medical specialists, fully licensed and thoroughly verified.",
     "specialistCard2Title": "Multilingual Doctors",
@@ -76,20 +76,20 @@
       "emergencySub": "Always available",
       "multilingual": "Multilingual Care",
       "multilingualSub": "English, Spanish & more",
-      "location": "At Your Location",
-      "locationSub": "Hotel, Airbnb or home",
+      "location": "Telehealth Anywhere",
+      "locationSub": "Available on your phone",
       "certified": "Certified Specialists",
       "certifiedSub": "Licensed & insured"
     },
     "services": {
-      "emergencyCare": "Emergency Care",
-      "emergencyCareDesc": "Immediate medical response across Latin America. Doctor dispatched to your location within 30 min.",
-      "appointment": "Book an Appointment",
-      "appointmentDesc": "Schedule a visit with a specialist in English, French or German. Available same day.",
-      "specialist": "Specialist Consultations",
-      "specialistDesc": "Cardiology, dermatology, pediatrics, and more. International-standard care in your language.",
-      "labs": "Prescriptions & Labs",
-      "labsDesc": "Receive your prescription digitally. Coordinated with labs and pharmacies near you."
+      "emergencyCare": "24/7 Telemedicine",
+      "emergencyCareDesc": "Immediate medical response via WhatsApp. Talk to a certified doctor online within minutes.",
+      "appointment": "Virtual Consultations",
+      "appointmentDesc": "Schedule a same-day video consultation with general practitioners and specialists in your language.",
+      "specialist": "Specialist Second Opinions",
+      "specialistDesc": "Get digital consultations with pediatricians, dermatologists, cardiologists, and other specialties.",
+      "labs": "Digital Prescriptions",
+      "labsDesc": "Receive official medical prescriptions and lab referrals digitally, ready to use at pharmacies near you."
     }
   },
   "about": {
