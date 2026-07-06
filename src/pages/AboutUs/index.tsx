@@ -21,7 +21,7 @@ export const AboutUs: React.FC = () => {
         "@id": "https://doctor-in.com/about-us/#webpage",
         "url": "https://doctor-in.com/about-us",
         "name": "About Us | Doctor In",
-        "description": "Learn about our mission to provide immediate, premium medical assistance to international travelers across Latin America."
+        "description": "Learn about our mission to provide seamless, premium medical assistance to international travelers and expats across Latin America."
       },
       {
         "@type": "BreadcrumbList",
@@ -48,7 +48,7 @@ export const AboutUs: React.FC = () => {
     <div className="w-full">
       <GeoHead 
         title="About Doctor In | Premium Healthcare for Travelers in Latam"
-        description="Learn about our mission to provide immediate, premium medical assistance to international travelers across Latin America."
+        description="Learn about Doctor In's mission to provide premium, accessible medical care to international travelers and expats across Latin America."
         jsonLd={jsonLd}
       />
 
@@ -154,7 +154,7 @@ export const AboutUs: React.FC = () => {
         </div>
       </div>
 
-      {/* Emergency Band */}
+      {/* Contact CTA Band */}
       <section className="w-full bg-primary py-10 lg:py-[60px] px-6 lg:px-20 relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row justify-between items-center gap-12 relative z-10">
           <div className="flex-1 text-center lg:text-left">
@@ -176,6 +176,9 @@ export const AboutUs: React.FC = () => {
               {t('about.whatsappSupport')}
             </Button>
             <span className="text-white/60 font-body text-sm font-medium">{t('about.availableIn')}</span>
+            <p className="text-white/40 text-xs text-center max-w-[320px] leading-relaxed">
+              {t('home.emergencyDisclaimer')}
+            </p>
           </div>
         </div>
       </section>

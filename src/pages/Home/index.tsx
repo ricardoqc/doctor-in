@@ -43,7 +43,7 @@ const Home: React.FC = () => {
         "contactPoint": {
           "@type": "ContactPoint",
           "telephone": "+51966386803",
-          "contactType": "emergency",
+          "contactType": "customer service",
           "availableLanguage": ["English", "Spanish", "French", "German"]
         },
         "sameAs": [
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
     <div className="w-full overflow-x-hidden">
       <GeoHead
         title="Doctor In | 24/7 Certified Doctors across Latin America"
-        description="Certified doctors — at your hotel, home or anywhere in Latin America. Available 24/7 in English, French, German & more."
+        description="Virtual medical consultations with certified doctors across Latin America. Priority care 24/7 in English, French, German & more. For travelers & expats."
         jsonLd={jsonLd}
       />
 
@@ -136,7 +136,7 @@ const Home: React.FC = () => {
                 rel="noopener noreferrer"
                 variant="secondary"
                 size="lg"
-                className="w-full lg:w-auto !rounded-full !px-10 shadow-lg flex gap-2.5 items-center justify-center"
+                className="w-full lg:w-auto !rounded-full !px-6 sm:!px-8 !text-sm sm:!text-base shadow-lg flex gap-2 items-center justify-center whitespace-nowrap"
               >
                 <WhatsAppIcon className="text-white" />
                 {t('home.emergencyBtn')}
@@ -147,9 +147,9 @@ const Home: React.FC = () => {
                 rel="noopener noreferrer"
                 variant="primary"
                 size="lg"
-                className="w-full lg:w-auto !rounded-full !px-10 shadow-xl flex gap-2.5 items-center justify-center"
+                className="w-full lg:w-auto !rounded-full !px-6 sm:!px-8 !text-sm sm:!text-base shadow-xl flex gap-2 items-center justify-center whitespace-nowrap"
               >
-                <Calendar size={20} />
+                <Calendar size={18} />
                 {t('common.bookNow')}
               </Button>
             </div>
@@ -373,6 +373,9 @@ const Home: React.FC = () => {
               <WhatsAppIcon className="text-primary" width={20} height={20} />
               {t('home.whatsappEmergency')}
             </Button>
+            <p className="text-white/50 text-xs text-center max-w-[360px] mt-1 leading-relaxed px-2">
+              {t('home.emergencyDisclaimer')}
+            </p>
           </div>
         </div>
       </section>

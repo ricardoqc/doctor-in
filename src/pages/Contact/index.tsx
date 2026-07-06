@@ -55,7 +55,7 @@ export const ContactPage: React.FC = () => {
         "@id": "https://doctor-in.com/contact/#webpage",
         "url": "https://doctor-in.com/contact",
         "name": "Contact Us | Doctor In",
-        "description": "We are available 24/7 for medical emergencies and standard consultations across Latin America. Contact our English-speaking team today."
+        "description": "We are available 24/7 for urgent medical consultations and standard care across Latin America. Contact our multilingual team today."
       },
       {
         "@type": "BreadcrumbList",
@@ -82,7 +82,7 @@ export const ContactPage: React.FC = () => {
     <div className="w-full">
       <GeoHead 
         title="Contact Us | 24/7 Medical Assistance in Latin America"
-        description="We are available 24/7 for medical emergencies and standard consultations across Latin America. Contact our English-speaking team today."
+        description="Contact Doctor In for urgent medical consultations across Latin America. Available 24/7, multilingual team. Serving travelers & expats."
         jsonLd={jsonLd}
       />
 

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Home EN -->
+  <url>
+    <loc>https://doctor-in.com/</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://doctor-in.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://doctor-in.com/es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://doctor-in.com/"/>
+  </url>
+
+  <!-- About Us EN -->
+  <url>
+    <loc>https://doctor-in.com/about-us</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://doctor-in.com/about-us"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://doctor-in.com/es/about-us"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://doctor-in.com/about-us"/>
+  </url>
+
+  <!-- Contact EN -->
+  <url>
+    <loc>https://doctor-in.com/contact</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://doctor-in.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://doctor-in.com/es/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://doctor-in.com/contact"/>
+  </url>
+
+  <!-- Blog EN -->
+  <url>
+    <loc>https://doctor-in.com/blog</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://doctor-in.com/blog"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://doctor-in.com/es/blog"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://doctor-in.com/blog"/>
+  </url>
+
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://doctor-in.com/privacy</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://doctor-in.com/terms</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Cookie Policy -->
+  <url>
+    <loc>https://doctor-in.com/cookie-policy</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+</urlset>

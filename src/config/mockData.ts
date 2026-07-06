@@ -8,7 +8,7 @@ export const CITIES = [
 ];
 
 export const TRUST_BAR_ITEMS = [
-  { icon: Timer, title: '24/7 Emergency', sub: 'Always available' },
+  { icon: Timer, title: 'Priority Care 24/7', sub: 'Always available for you' },
   { icon: Languages, title: 'Multilingual Care', sub: 'English, Spanish & more' },
   { icon: MapPin, title: 'At Your Location', sub: 'Hotel, Airbnb or home' },
   { icon: ShieldCheck, title: 'Certified Specialists', sub: 'Licensed & insured' },
@@ -17,11 +17,11 @@ export const TRUST_BAR_ITEMS = [
 export const SERVICES = [
   {
     icon: PhoneCall,
-    title: 'Emergency Care',
-    desc: 'Immediate medical response across Latin America. Doctor dispatched to your location within 30 min.',
+    title: 'Urgent Telehealth',
+    desc: 'Immediate medical response via video call or WhatsApp across Latin America. Certified doctor available in minutes.',
     color: 'text-primary',
     bgColor: 'bg-primary/10',
-    id: 'emergency-care'
+    id: 'urgent-care'
   },
   {
     icon: ClipboardCheck,
@@ -71,7 +71,7 @@ export const DOCTORS = [
   },
   {
     name: 'Dr. Javier Mendez',
-    specialty: 'Emergency Care',
+    specialty: 'Urgent Care Medicine',
     info: 'English • Spanish • 18 yrs exp.',
     image: '/images/hero_doctor_peru_1778509460076.png'
   }
@@ -132,7 +132,7 @@ export const ABOUT_TEAM = [
   { name: 'Dr. Maria Gonzalez', specialty: 'Pediatrics', experience: '15 years of experience', image: '/images/specialist_doctor_1_1778509475757.png' },
   { name: 'Dr. Ricardo Silva', specialty: 'General Medicine', experience: '12 years of experience', image: '/images/specialist_doctor_2_1778509492948.png' },
   { name: 'Dr. Elena Rossi', specialty: 'Internal Medicine', experience: '10 years of experience', image: '/images/specialist_doctor_3_1778509508897.png' },
-  { name: 'Dr. Javier Mendez', specialty: 'Emergency Care', experience: '18 years of experience', image: '/images/hero_doctor_peru_1778509460076.png' },
+  { name: 'Dr. Javier Mendez', specialty: 'Urgent Care Medicine', experience: '18 years of experience', image: '/images/hero_doctor_peru_1778509460076.png' },
 ];
 
 export const ABOUT_VALUES = [
@@ -146,7 +146,7 @@ export const ABOUT_VALUES = [
   { 
     icon: Timer, 
     title: '24/7 Availability', 
-    desc: 'Medical emergencies don\'t have a schedule. We are available round the clock, 365 days a year.',
+    desc: 'Medical needs don\'t have a schedule. We are available round the clock, 365 days a year.',
     color: 'text-primary',
     bgColor: 'bg-primary/20'
   },

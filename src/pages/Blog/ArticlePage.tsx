@@ -217,12 +217,12 @@ export const ArticlePage: React.FC = () => {
             <div className="bg-primary p-8 lg:p-10 rounded-[32px] text-surface shadow-urgent relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:scale-125 transition-transform duration-700" />
               <h3 className="text-[24px] lg:text-[28px] font-heading font-bold mb-4 relative z-10 leading-tight">
-                {currentLang.startsWith('es') ? '¿Emergencia Médica?' : 'Medical Emergency?'}
+                {currentLang.startsWith('es') ? '¿Necesitas atención médica?' : 'Need Medical Attention?'}
               </h3>
               <p className="text-white/80 font-body text-base mb-8 relative z-10">
                 {currentLang.startsWith('es') 
-                  ? 'Nuestros médicos de habla inglesa te atienden directamente en tu hotel en toda Latinoamérica. Disponibles 24/7.' 
-                  : 'Our English-speaking doctors can assist you directly at your hotel across Latin America. 24/7 Availability.'}
+                  ? 'Nuestros médicos certificados te atienden directamente en tu hotel en toda Latinoamérica. Disponibles 24/7.' 
+                  : 'Our certified, multilingual doctors can assist you directly at your hotel across Latin America. Available 24/7.'}
               </p>
               <Button 
                 href={t('common.whatsappEmergencyLink')}
@@ -233,8 +233,13 @@ export const ArticlePage: React.FC = () => {
                 className="w-full !text-primary font-bold shadow-2xl flex gap-2.5 items-center justify-center relative z-10"
               >
                 <WhatsAppIcon className="text-primary" />
-                {currentLang.startsWith('es') ? 'WhatsApp Doctor Ahora' : 'WhatsApp Doctor Now'}
+                {currentLang.startsWith('es') ? 'WhatsApp Doctor Ahora' : 'WhatsApp a Doctor Now'}
               </Button>
+              <p className="text-white/40 text-xs text-center mt-3 relative z-10 leading-relaxed">
+                {currentLang.startsWith('es') 
+                  ? 'Para emergencias que pongan en riesgo tu vida, contacta los servicios de emergencia locales.' 
+                  : 'For life-threatening emergencies, contact local emergency services immediately.'}
+              </p>
             </div>
 
             {/* Popular/Recent Articles */}

@@ -1,2 +1,12 @@
 User-agent: *
 Allow: /
+
+# Block private/api routes
+Disallow: /api/
+Disallow: /admin/
+
+# Don't block static assets needed for rendering
+# Allow: /images/
+# Allow: /fonts/
+
+Sitemap: https://doctor-in.com/sitemap.xml

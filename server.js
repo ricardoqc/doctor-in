@@ -180,10 +180,10 @@ app.post('/api/send-email', async (req, res) => {
               
               <!-- Footer Contact & Credentials -->
               <div style="background-color: #071f5d; padding: 35px 30px; text-align: center; color: #ffffff; font-size: 13px;">
-                <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 15px; letter-spacing: 0.5px;">Need Instant Medical Assistance?</p>
+                <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 15px; letter-spacing: 0.5px;">Need Medical Assistance?</p>
                 <p style="margin: 0 0 20px 0; color: #94a3b8; font-size: 13px;">Our medical network coordinates visits 24/7/365</p>
                 <div style="margin-bottom: 25px;">
-                  <a href="https://wa.me/51966386803" style="background-color: #25D366; color: #ffffff; padding: 12px 24px; border-radius: 9999px; text-decoration: none; font-weight: bold; font-size: 12px; display: inline-block; margin: 5px; box-shadow: 0 4px 8px rgba(37, 211, 102, 0.2);">WhatsApp Emergency</a>
+                  <a href="https://wa.me/51966386803" style="background-color: #25D366; color: #ffffff; padding: 12px 24px; border-radius: 9999px; text-decoration: none; font-weight: bold; font-size: 12px; display: inline-block; margin: 5px; box-shadow: 0 4px 8px rgba(37, 211, 102, 0.2);">WhatsApp Priority</a>
                   <a href="mailto:doctorin.health@gmail.com" style="background-color: #f42434; color: #ffffff; padding: 12px 24px; border-radius: 9999px; text-decoration: none; font-weight: bold; font-size: 12px; display: inline-block; margin: 5px; box-shadow: 0 4px 8px rgba(244, 36, 52, 0.2);">Email Coordinator</a>
                 </div>
                 <p style="margin: 0 0 5px 0; font-size: 11px; color: #64748b;">This email was dispatched securely via Doctor In Mail Server.</p>
