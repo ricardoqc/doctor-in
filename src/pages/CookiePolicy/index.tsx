@@ -187,7 +187,7 @@ export const CookiePolicyPage: React.FC = () => {
               <div className="pt-8 border-t border-surface-alt flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div className="space-y-1 text-center sm:text-left">
                   <div className="text-sm font-bold text-secondary">¿Tienes dudas sobre las Cookies?</div>
-                  <p className="text-xs text-dark-alt/50 font-medium">Escríbenos a doctorin.health@gmail.com o vía WhatsApp al +51 966 386 803</p>
+                  <p className="text-xs text-dark-alt/50 font-medium">Escríbenos a doctorin.health@gmail.com o vía WhatsApp al +51 941 667 151</p>
                 </div>
                 <Link to="/contact" className="shrink-0 w-full sm:w-auto">
                   <Button variant="primary" className="!rounded-full px-8 w-full sm:w-auto flex items-center justify-center gap-2">
@@ -301,7 +301,7 @@ export const CookiePolicyPage: React.FC = () => {
               <div className="pt-8 border-t border-surface-alt flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div className="space-y-1 text-center sm:text-left">
                   <div className="text-sm font-bold text-secondary">Have questions about Cookies?</div>
-                  <p className="text-xs text-dark-alt/50 font-medium">Email us at doctorin.health@gmail.com or via WhatsApp at +51 966 386 803</p>
+                  <p className="text-xs text-dark-alt/50 font-medium">Email us at doctorin.health@gmail.com or via WhatsApp at +51 941 667 151</p>
                 </div>
                 <Link to="/contact" className="shrink-0 w-full sm:w-auto">
                   <Button variant="primary" className="!rounded-full px-8 w-full sm:w-auto flex items-center justify-center gap-2">

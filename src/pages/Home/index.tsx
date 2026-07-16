@@ -42,7 +42,7 @@ const Home: React.FC = () => {
         "logo": "https://doctor-in.com/images/brands/Isotipo-2.svg",
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+51966386803",
+          "telephone": "+51941667151",
           "contactType": "customer service",
           "availableLanguage": ["English", "Spanish", "French", "German"]
         },
@@ -57,7 +57,7 @@ const Home: React.FC = () => {
         "@id": "https://doctor-in.com/#localbusiness",
         "name": "DOCTOR CUSCO - Urgent Care Clinic International",
         "image": "https://doctor-in.com/images/brands/Isotipo-2.svg",
-        "telephone": "+51966386803",
+        "telephone": "+51941667151",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Cusco",

@@ -170,7 +170,7 @@ export const Footer: React.FC = () => {
                     rel="noopener noreferrer" 
                     className="text-surface font-semibold hover:text-accent transition-colors"
                   >
-                    +51 966 386 803
+                    +51 941 667 151
                   </a>
                 </div>
               </li>

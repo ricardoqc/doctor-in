@@ -153,7 +153,7 @@ export const PrivacyPage: React.FC = () => {
                   Utilizamos plataformas reconocidas internacionalmente para agilizar la gestión de manera oportuna y confidencial:
                 </p>
                 <ul className="list-disc list-inside space-y-2 pl-4 text-sm font-medium">
-                  <li>Canales protegidos de mensajería comercial (como WhatsApp Business de soporte al +51 966 386 803).</li>
+                  <li>Canales protegidos de mensajería comercial (como WhatsApp Business de soporte al +51 941 667 151).</li>
                   <li>Formularios web encriptados mediante protocolos de cifrado seguros SSL.</li>
                   <li>Líneas directas seguras entre nuestros despachadores y los especialistas de salud.</li>
                 </ul>
@@ -213,7 +213,7 @@ export const PrivacyPage: React.FC = () => {
               <div className="pt-8 border-t border-surface-alt flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div className="space-y-1 text-center sm:text-left">
                   <div className="text-sm font-bold text-secondary">¿Deseas solicitar la eliminación de tus datos?</div>
-                  <p className="text-xs text-dark-alt/50 font-medium">Contáctanos a doctorin.health@gmail.com o vía WhatsApp al +51 966 386 803</p>
+                  <p className="text-xs text-dark-alt/50 font-medium">Contáctanos a doctorin.health@gmail.com o vía WhatsApp al +51 941 667 151</p>
                 </div>
                 <Link to="/contact" className="shrink-0 w-full sm:w-auto">
                   <Button variant="primary" className="!rounded-full px-8 w-full sm:w-auto flex items-center justify-center gap-2">
@@ -297,7 +297,7 @@ export const PrivacyPage: React.FC = () => {
                   We utilize secure and widely trusted communication platforms to manage fast and confidential interactions:
                 </p>
                 <ul className="list-disc list-inside space-y-2 pl-4 text-sm font-medium">
-                  <li>Encrypted chat channels (such as WhatsApp Business at +51 966 386 803).</li>
+                  <li>Encrypted chat channels (such as WhatsApp Business at +51 941 667 151).</li>
                   <li>Secure online forms protected by encryption protocols.</li>
                   <li>Direct, protected channels between coordinators and dispatch doctors.</li>
                 </ul>
@@ -357,7 +357,7 @@ export const PrivacyPage: React.FC = () => {
               <div className="pt-8 border-t border-surface-alt flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div className="space-y-1 text-center sm:text-left">
                   <div className="text-sm font-bold text-secondary">Want to request data deletion or have questions?</div>
-                  <p className="text-xs text-dark-alt/50 font-medium">Contact us at doctorin.health@gmail.com or via WhatsApp at +51 966 386 803</p>
+                  <p className="text-xs text-dark-alt/50 font-medium">Contact us at doctorin.health@gmail.com or via WhatsApp at +51 941 667 151</p>
                 </div>
                 <Link to="/contact" className="shrink-0 w-full sm:w-auto">
                   <Button variant="primary" className="!rounded-full px-8 w-full sm:w-auto flex items-center justify-center gap-2">

@@ -115,7 +115,7 @@ export const ContactPage: React.FC = () => {
 
             <div className="space-y-6">
               {[
-                { icon: WhatsAppIcon, title: t('contact.waTitle'), detail: '+51 966 386 803', href: t('common.whatsappGeneralLink'), color: 'text-primary', bgColor: 'bg-primary/10' },
+                { icon: WhatsAppIcon, title: t('contact.waTitle'), detail: '+51 941 667 151', href: t('common.whatsappGeneralLink'), color: 'text-primary', bgColor: 'bg-primary/10' },
                 { icon: Mail, title: t('contact.emailTitle'), detail: 'doctorin.health@gmail.com', href: 'mailto:doctorin.health@gmail.com', color: 'text-accent', bgColor: 'bg-accent/10' },
                 { icon: Clock, title: t('contact.availTitle'), detail: t('contact.availDesc'), href: undefined, color: 'text-secondary', bgColor: 'bg-secondary/10' }
               ].map((info, idx) => {
